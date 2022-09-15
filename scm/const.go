@@ -127,6 +127,7 @@ const (
 	DriverCoding
 	DriverGitee
 	DriverAzure
+	DriverOther
 )
 
 // String returns the string representation of Driver.
@@ -150,6 +151,8 @@ func (d Driver) String() (s string) {
 		return "gitee"
 	case DriverAzure:
 		return "azure"
+	case DriverOther:
+		return "other"
 	default:
 		return "unknown"
 	}
