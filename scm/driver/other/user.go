@@ -18,9 +18,14 @@ type userService struct {
 }
 
 func (s *userService) Find(ctx context.Context) (*scm.User, *scm.Response, error) {
+	path := "api/user"
+	p := ctx.Value("path").(string)
+	if p != "" {
+		path = p
+	}
 	out := new(user)
 
-	res, err := s.client.do(ctx, "GET", "api/user", nil, out)
+	res, err := s.client.do(ctx, "GET", path, nil, out)
 	return convertUser(out), res, err
 }
 

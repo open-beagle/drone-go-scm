@@ -3,5 +3,6 @@
     "username": "test",
     "email": "test@test.com",
     "name": "测试",
-    "avatar_url": "https://www.baidu.com"
+    "avatar_url": "https://www.baidu.com",
+    "state": "active"
 }
