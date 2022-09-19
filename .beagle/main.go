@@ -6,12 +6,12 @@ import (
 	"net/http"
 
 	"github.com/drone/go-scm/scm"
-	"github.com/drone/go-scm/scm/driver/other"
+	"github.com/drone/go-scm/scm/driver/bgcloud"
 	"github.com/drone/go-scm/scm/transport/oauth2"
 )
 
 func main() {
-	client := other.NewDefault()
+	client := bgcloud.NewDefault()
 	client.Client = &http.Client{
 		Transport: &oauth2.Transport{
 			Source: oauth2.StaticTokenSource(

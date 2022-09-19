@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package other
+package bgcloud
 
 import (
 	"context"
@@ -16,7 +16,7 @@ type userService struct {
 }
 
 func (s *userService) Find(ctx context.Context) (*scm.User, *scm.Response, error) {
-	path := "oauth/getUserInfo"
+	path := "awecloud/dex/oauth/getUserInfo"
 	out := new(user)
 
 	res, err := s.client.do(ctx, "GET", path, nil, out)
@@ -24,7 +24,7 @@ func (s *userService) Find(ctx context.Context) (*scm.User, *scm.Response, error
 }
 
 func (s *userService) FindLogin(ctx context.Context, login string) (*scm.User, *scm.Response, error) {
-	path := "oauth/getUserInfo"
+	path := "awecloud/dex/oauth/getUserInfo"
 	out := new(user)
 	res, err := s.client.do(ctx, "GET", path, nil, &out)
 	if err != nil {
@@ -44,7 +44,7 @@ func (s *userService) FindEmail(ctx context.Context) (string, *scm.Response, err
 // 未使用
 func (s *userService) ListEmail(ctx context.Context, opts scm.ListOptions) ([]*scm.Email, *scm.Response, error) {
 	// path := fmt.Sprintf("api/v4/user/emails?%s", encodeListOptions(opts))
-	path := "oauth/getUserInfo"
+	path := "awecloud/dex/oauth/getUserInfo"
 	out := new(user)
 	res, err := s.client.do(ctx, "GET", path, nil, &out)
 	o := []*spec{}

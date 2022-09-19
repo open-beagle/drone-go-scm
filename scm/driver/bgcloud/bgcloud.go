@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package gitlab implements a GitLab client.
-package other
+package bgcloud
 
 import (
 	"bytes"
@@ -61,7 +61,7 @@ func New(uri string) (*scm.Client, error) {
 // default gitlab.com address.
 
 func NewDefault() *scm.Client {
-	client, _ := New("https://cloud.wodcloud.com/awecloud/dex")
+	client, _ := New("https://cloud.wodcloud.com")
 	return client
 }
 
