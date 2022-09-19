@@ -6,17 +6,17 @@ import (
 	"net/http"
 
 	"github.com/drone/go-scm/scm"
-	"github.com/drone/go-scm/scm/driver/bgcloud"
+	"github.com/drone/go-scm/scm/driver/beagle"
 	"github.com/drone/go-scm/scm/transport/oauth2"
 )
 
 func main() {
-	client := bgcloud.NewDefault()
+	client := beagle.NewDefault()
 	client.Client = &http.Client{
 		Transport: &oauth2.Transport{
 			Source: oauth2.StaticTokenSource(
 				&scm.Token{
-					Token: "eyJhbGciOiJIUzUxMiIsImtpZCI6IjEyMyIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIzMzZmZTIxYmJlYTY5OTg0NWM1MjEyYjg1YjJhMWJhYWZjMzAyZDNlMDdkMjcwZjI1YmM5Njc5NTRlZDk5YmM1IiwiZXhwIjoxNjYzNTc0NTE3LCJzdWIiOiJyb290In0.8fTm_JKsNbJx1dy0IhAmenSf6LIWBJkcLPCdef8FrT3PFYt_DA8DYOPpky0tXa3-1R__tgdByzIcZrFInX0x2g",
+					Token: "eyJhbGciOiJIUzUxMiIsImtpZCI6IjEyMyIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIzMzZmZTIxYmJlYTY5OTg0NWM1MjEyYjg1YjJhMWJhYWZjMzAyZDNlMDdkMjcwZjI1YmM5Njc5NTRlZDk5YmM1IiwiZXhwIjoxNjYzNjAxODEzLCJzdWIiOiJyb290In0.PK87rsaVZZaPEe1saN0MxzXjfblL7XAIr9KAI7GMnckMIX9TvtfFnorkKWQ4eIcAdc-RIqmov7C-bUMtLzEspA",
 				},
 			),
 		},

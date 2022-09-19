@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package gitlab implements a GitLab client.
-package bgcloud
+package beagle
 
 import (
 	"bytes"
