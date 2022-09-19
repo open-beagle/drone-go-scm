@@ -10,10 +10,23 @@ import (
 	"context"
 	"encoding/json"
 	"net/url"
-	"strconv"
 	"strings"
+	"time"
 
 	"github.com/drone/go-scm/scm"
+)
+
+type Token struct {
+	Access  string
+	Refresh string
+	Expires time.Time
+}
+
+type key int
+
+const (
+	tokenKey key = iota
+	errorKey
 )
 
 // New returns a new GitLab API client.
@@ -48,7 +61,7 @@ func New(uri string) (*scm.Client, error) {
 // default gitlab.com address.
 
 func NewDefault() *scm.Client {
-	client, _ := New("http://localhost:9096")
+	client, _ := New("https://cloud.wodcloud.com/awecloud/dex")
 	return client
 }
 
@@ -66,6 +79,8 @@ func (c *wrapper) do(ctx context.Context, method, path string, in, out interface
 		Path:   path,
 	}
 
+	token, _ := ctx.Value(tokenKey).(*Token)
+
 	// if we are posting or putting data, we need to
 	// write it to the body of the request.
 	if in != nil {
@@ -74,6 +89,8 @@ func (c *wrapper) do(ctx context.Context, method, path string, in, out interface
 		req.Header = map[string][]string{
 			"Content-Type": {"application/json"},
 		}
+		//添加获取用户信息header
+		req.Header.Add("Authorization", "Bearer "+token.Access)
 		req.Body = buf
 	}
 
@@ -84,22 +101,22 @@ func (c *wrapper) do(ctx context.Context, method, path string, in, out interface
 	}
 	defer res.Body.Close()
 
-	// parse the gitlab request id.
-	res.ID = res.Header.Get("X-Request-Id")
+	// // parse the gitlab request id.
+	// res.ID = res.Header.Get("X-Request-Id")
 
-	// parse the gitlab rate limit details.
-	res.Rate.Limit, _ = strconv.Atoi(
-		res.Header.Get("RateLimit-Limit"),
-	)
-	res.Rate.Remaining, _ = strconv.Atoi(
-		res.Header.Get("RateLimit-Remaining"),
-	)
-	res.Rate.Reset, _ = strconv.ParseInt(
-		res.Header.Get("RateLimit-Reset"), 10, 64,
-	)
+	// // parse the gitlab rate limit details.
+	// res.Rate.Limit, _ = strconv.Atoi(
+	// 	res.Header.Get("RateLimit-Limit"),
+	// )
+	// res.Rate.Remaining, _ = strconv.Atoi(
+	// 	res.Header.Get("RateLimit-Remaining"),
+	// )
+	// res.Rate.Reset, _ = strconv.ParseInt(
+	// 	res.Header.Get("RateLimit-Reset"), 10, 64,
+	// )
 
-	// snapshot the request rate limit
-	c.Client.SetRate(res.Rate)
+	// // snapshot the request rate limit
+	// c.Client.SetRate(res.Rate)
 
 	// if an error is encountered, unmarshal and return the
 	// error response.

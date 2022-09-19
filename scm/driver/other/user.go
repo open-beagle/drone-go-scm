@@ -6,11 +6,9 @@ package other
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/drone/go-scm/scm"
-	"github.com/drone/go-scm/scm/driver/internal/null"
 )
 
 type userService struct {
@@ -18,11 +16,7 @@ type userService struct {
 }
 
 func (s *userService) Find(ctx context.Context) (*scm.User, *scm.Response, error) {
-	path := "api/user"
-	p := ctx.Value("path").(string)
-	if p != "" {
-		path = p
-	}
+	path := "oauth/getUserInfo"
 	out := new(user)
 
 	res, err := s.client.do(ctx, "GET", path, nil, out)
@@ -30,16 +24,16 @@ func (s *userService) Find(ctx context.Context) (*scm.User, *scm.Response, error
 }
 
 func (s *userService) FindLogin(ctx context.Context, login string) (*scm.User, *scm.Response, error) {
-	path := fmt.Sprintf("api/v4/users?search=%s", login)
-	out := []*user{}
+	path := "oauth/getUserInfo"
+	out := new(user)
 	res, err := s.client.do(ctx, "GET", path, nil, &out)
 	if err != nil {
 		return nil, nil, err
 	}
-	if len(out) != 1 || !strings.EqualFold(out[0].Username, login) {
+	if !strings.EqualFold(out.Metadata.Name, login) {
 		return nil, nil, scm.ErrNotFound
 	}
-	return convertUser(out[0]), res, err
+	return convertUser(out), res, err
 }
 
 func (s *userService) FindEmail(ctx context.Context) (string, *scm.Response, error) {
@@ -47,40 +41,49 @@ func (s *userService) FindEmail(ctx context.Context) (string, *scm.Response, err
 	return user.Email, res, err
 }
 
+// 未使用
 func (s *userService) ListEmail(ctx context.Context, opts scm.ListOptions) ([]*scm.Email, *scm.Response, error) {
-	path := fmt.Sprintf("api/v4/user/emails?%s", encodeListOptions(opts))
-	out := []*email{}
+	// path := fmt.Sprintf("api/v4/user/emails?%s", encodeListOptions(opts))
+	path := "oauth/getUserInfo"
+	out := new(user)
 	res, err := s.client.do(ctx, "GET", path, nil, &out)
-	return convertEmailList(out), res, err
+	o := []*spec{}
+	o = append(o, &out.Spec)
+	return convertEmailList(o), res, err
 }
 
 type user struct {
-	ID       int         `json:"id"`
-	Username string      `json:"username"`
-	Name     string      `json:"name"`
-	Email    null.String `json:"email"`
-	Avatar   string      `json:"avatar_url"`
+	Metadata metadata `json:"metadata"`
+	Spec     spec     `json:"spec"`
 }
 
-type email struct {
-	Email     string      `json:"email"`
-	Confirmed null.String `json:"confirmed_at"`
+type metadata struct {
+	Name string `json:"name"`
 }
+
+type spec struct {
+	Alias string `json:"alias"`
+	Email string `json:"email"`
+}
+
+// type email struct {
+// 	Email     string      `json:"email"`
+// 	Confirmed null.String `json:"confirmed_at"`
+// }
 
 // helper function to convert from the gitlab user structure to
 // the common user structure.
 func convertUser(from *user) *scm.User {
 	return &scm.User{
-		Avatar: from.Avatar,
-		Email:  from.Email.String,
-		Login:  from.Username,
-		Name:   from.Name,
+		Email: from.Spec.Email,
+		Login: from.Metadata.Name,
+		Name:  from.Spec.Alias,
 	}
 }
 
 // helper function to convert from the gitlab email list to
 // the common email structure.
-func convertEmailList(from []*email) []*scm.Email {
+func convertEmailList(from []*spec) []*scm.Email {
 	to := []*scm.Email{}
 	for _, v := range from {
 		to = append(to, convertEmail(v))
@@ -90,9 +93,8 @@ func convertEmailList(from []*email) []*scm.Email {
 
 // helper function to convert from the gitlab email structure to
 // the common email structure.
-func convertEmail(from *email) *scm.Email {
+func convertEmail(from *spec) *scm.Email {
 	return &scm.Email{
-		Value:    from.Email,
-		Verified: !from.Confirmed.IsZero(),
+		Value: from.Email,
 	}
 }
