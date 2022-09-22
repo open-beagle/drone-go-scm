@@ -220,15 +220,41 @@ func (s *repositoryService) CreateHook(ctx context.Context, repo string, input *
 	return convertHook(out), res, err
 }
 
+const repostatus = `{
+    "author": {
+        "web_url": "https://gitlab.example.com/thedude",
+        "name": "root",
+        "avatar_url": "https://gitlab.example.com/uploads/user/avatar/28/The-Big-Lebowski-400-400.png",
+        "username": "root",
+        "state": "active",
+        "id": 28
+    },
+    "name": "default",
+    "sha": "18f3e63d05582537db6d183d9d557be09e1f90c8",
+    "status": "running",
+    "coverage": 100.0,
+    "description": "the dude abides",
+    "id": 93,
+    "target_url": "https://gitlab.example.com/thedude/gitlab-ce/builds/91",
+    "ref": null,
+    "started_at": null,
+    "created_at": "2016-01-19T09:05:50.355Z",
+    "allow_failure": false,
+    "finished_at": "2016-01-19T09:05:50.365Z"
+}`
+
+// 模拟status数据
 func (s *repositoryService) CreateStatus(ctx context.Context, repo, ref string, input *scm.StatusInput) (*scm.Status, *scm.Response, error) {
-	params := url.Values{}
-	params.Set("state", convertFromState(input.State))
-	params.Set("name", input.Label)
-	params.Set("target_url", input.Target)
-	path := fmt.Sprintf("api/v4/projects/%s/statuses/%s?%s", encode(repo), ref, params.Encode())
+	// params := url.Values{}
+	// params.Set("state", convertFromState(input.State))
+	// params.Set("name", input.Label)
+	// params.Set("target_url", input.Target)
+	// path := fmt.Sprintf("api/v4/projects/%s/statuses/%s?%s", encode(repo), ref, params.Encode())
+
 	out := new(status)
-	res, err := s.client.do(ctx, "POST", path, nil, out)
-	return convertStatus(out), res, err
+	err := json.Unmarshal([]byte(repostatus), out)
+	// res, err := s.client.do(ctx, "POST", path, nil, out)
+	return convertStatus(out), nil, err
 }
 
 func (s *repositoryService) UpdateHook(ctx context.Context, repo string, id string, input *scm.HookInput) (*scm.Hook, *scm.Response, error) {
