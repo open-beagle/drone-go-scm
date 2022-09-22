@@ -160,8 +160,11 @@ func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*
 	o := new(repository)
 	err := json.Unmarshal([]byte(analogdata), o)
 	out = append(out, o)
+	res := new(scm.Response)
+	// Page.Next不为0
+	res.Page.Next = 10
 	// res, err := s.client.do(ctx, "GET", path, nil, &out)
-	return convertRepositoryList(out), nil, err
+	return convertRepositoryList(out), res, err
 }
 
 func (s *repositoryService) ListHooks(ctx context.Context, repo string, opts scm.ListOptions) ([]*scm.Hook, *scm.Response, error) {
