@@ -24,7 +24,7 @@ const contentData = `{
     "file_path": ".beagle.yml",
     "size": 1476,
     "encoding": "base64",
-    "content": "a2luZDogcGlwZWxpbmUKdHlwZTogZG9ja2VyCm5hbWU6IGRlZmF1bHQKCnN0ZXBzOgotIG5hbWU6IGdyZWV0aW5nCiAgaW1hZ2U6IHJlZ2lzdHJ5LmNuLXFpbmdkYW8uYWxpeXVuY3MuY29tL3dvZC9hbHBpbmU6My4xMwogIGNvbW1hbmRzOgogIC0gdW5hbWUgLWEK",
+    "content": "a2luZDogcGlwZWxpbmUKdHlwZTogZG9ja2VyCm5hbWU6IGRlZmF1bHQKCmNsb25lOgogIGRpc2FibGU6IHRydWUKCnN0ZXBzOgotIG5hbWU6IGdyZWV0aW5nCiAgaW1hZ2U6IHJlZ2lzdHJ5LmNuLXFpbmdkYW8uYWxpeXVuY3MuY29tL3dvZC9hbHBpbmU6My4xMwogIGNvbW1hbmRzOgogIC0gdW5hbWUgLWEK",
     "ref": "master",
     "blob_id": "79f7bbd25901e8334750839545a9bd021f0e4c83",
     "commit_id": "d5a3ff139356ce33e37e73add446f16869741b50",
