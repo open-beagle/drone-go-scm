@@ -7,7 +7,6 @@ package stash
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"testing"
 
@@ -40,27 +39,6 @@ func TestGitFindCommit(t *testing.T) {
 		t.Errorf("Unexpected Results")
 		t.Log(diff)
 	}
-}
-
-// 验证模拟数据
-func TestGitBeagleFindCommit(t *testing.T) {
-
-	client, _ := New("http://example.com:7990")
-	client.Driver = scm.DriverBeagle
-	got, _, err := client.Git.FindCommit(context.Background(), "PRJ/my-repo", "131cb13f4aed12e725177bc4b7c28db67839bf9f")
-	if err != nil {
-		t.Error(err)
-	}
-	fmt.Println(got.Author)
-
-	// want := new(scm.Commit)
-	// raw, _ := ioutil.ReadFile("testdata/commit.json.golden")
-	// _ = json.Unmarshal(raw, &want)
-
-	// if diff := cmp.Diff(got, want); diff != "" {
-	// 	t.Errorf("Unexpected Results")
-	// 	t.Log(diff)
-	// }
 }
 
 func TestGitFindBranch(t *testing.T) {

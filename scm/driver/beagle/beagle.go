@@ -44,7 +44,7 @@ func New(uri string) (*scm.Client, error) {
 	client.Driver = scm.DriverBeagle
 	// client.Linker = &linker{base.String()}
 	client.Contents = &contentService{client}
-	// client.Git = &gitService{client}
+	client.Git = &gitService{client}
 	// client.Issues = &issueService{client}
 	// client.Organizations = &organizationService{client}
 	// client.Milestones = &milestoneService{client}

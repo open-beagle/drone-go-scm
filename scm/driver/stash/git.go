@@ -6,7 +6,6 @@ package stash
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -19,79 +18,6 @@ import (
 type gitService struct {
 	client *wrapper
 }
-
-const commitData string = `{
-    "size": 1,
-    "limit": 25,
-    "isLastPage": true,
-    "values": [
-{
-    "id": "131cb13f4aed12e725177bc4b7c28db67839bf9f",
-    "displayId": "131cb13f4ae",
-    "author": {
-        "name": "jcitizen",
-        "emailAddress": "jane@example.com",
-        "id": 1,
-        "displayName": "Jane Citizen",
-        "active": true,
-        "slug": "jcitizen",
-        "type": "NORMAL",
-        "links": {
-            "self": [
-                {
-                    "href": "http://example.com:7990/users/jcitizen"
-                }
-            ]
-        }
-    },
-    "authorTimestamp": 1530720102000,
-    "committer": {
-        "name": "jcitizen",
-        "emailAddress": "jane@example.com",
-        "id": 1,
-        "displayName": "Jane Citizen",
-        "active": true,
-        "slug": "jcitizen",
-        "type": "NORMAL",
-        "links": {
-            "self": [
-                {
-                    "href": "http://example.com:7990/users/jcitizen"
-                }
-            ]
-        }
-    },
-    "committerTimestamp": 1530720102000,
-    "message": "update files",
-    "parents": [
-        {
-            "id": "4f4b0ef1714a5b6cafdaf2f53c7f5f5b38fb9348",
-            "displayId": "4f4b0ef1714",
-            "author": {
-                "name": "Jane Citizen",
-                "emailAddress": "jane@example.com"
-            },
-            "authorTimestamp": 1530719890000,
-            "committer": {
-                "name": "Jane Citizen",
-                "emailAddress": "jane@example.com"
-            },
-            "committerTimestamp": 1530719890000,
-            "message": "update files",
-            "parents": [
-                {
-                    "id": "f636fe22d302c852df1a68fff2d744039fe55b3d",
-                    "displayId": "f636fe22d30"
-                }
-            ]
-        }
-    ]
-}
-],
-"start": 0,
-"authorCount": 1,
-"totalCount": 1
-}`
 
 func (s *gitService) CreateBranch(ctx context.Context, repo string, params *scm.ReferenceInput) (*scm.Response, error) {
 	namespace, repoName := scm.Split(repo)
@@ -120,16 +46,11 @@ func (s *gitService) FindBranch(ctx context.Context, repo, branch string) (*scm.
 	return nil, res, scm.ErrNotFound
 }
 
-// 增加模拟数据
 func (s *gitService) FindCommit(ctx context.Context, repo, ref string) (*scm.Commit, *scm.Response, error) {
-	out := new(commit)
-	switch s.client.Driver {
-	case scm.DriverBeagle:
-		err := json.Unmarshal([]byte(commitData), out)
-		return convertCommit(out), nil, err
-	}
+
 	namespace, name := scm.Split(repo)
 	path := fmt.Sprintf("rest/api/1.0/projects/%s/repos/%s/commits/%s", namespace, name, ref)
+	out := new(commit)
 
 	res, err := s.client.do(ctx, "GET", path, nil, out)
 	return convertCommit(out), res, err

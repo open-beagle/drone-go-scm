@@ -53,11 +53,11 @@ func main() {
 	}
 
 	// commit
-	got, _, err := client.Git.FindCommit(context.Background(), "PRJ/my-repo", "131cb13f4aed12e725177bc4b7c28db67839bf9f")
+	got, res, err := client.Git.FindCommit(context.Background(), "diaspora/diaspora", "7fd1a60b01f91b314f59955a4e4d4e80d8edf11d")
 	if err != nil {
 		fmt.Println(err)
 	}
 	//
-	fmt.Println(got.Author)
+	fmt.Println(got.Author, res)
 
 }
