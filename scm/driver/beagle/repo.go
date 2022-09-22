@@ -155,10 +155,13 @@ func (s *repositoryService) FindPerms(ctx context.Context, repo string) (*scm.Pe
 }
 
 func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*scm.Repository, *scm.Response, error) {
-	path := fmt.Sprintf("api/v4/projects?%s", encodeMemberListOptions(opts))
+	// path := fmt.Sprintf("api/v4/projects?%s", encodeMemberListOptions(opts))
 	out := []*repository{}
-	res, err := s.client.do(ctx, "GET", path, nil, &out)
-	return convertRepositoryList(out), res, err
+	o := new(repository)
+	err := json.Unmarshal([]byte(analogdata), o)
+	out = append(out, o)
+	// res, err := s.client.do(ctx, "GET", path, nil, &out)
+	return convertRepositoryList(out), nil, err
 }
 
 func (s *repositoryService) ListHooks(ctx context.Context, repo string, opts scm.ListOptions) ([]*scm.Hook, *scm.Response, error) {
