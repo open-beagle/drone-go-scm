@@ -47,10 +47,7 @@ func (s *gitService) FindBranch(ctx context.Context, repo, branch string) (*scm.
 	return nil, res, scm.ErrNotFound
 }
 
-func (s *gitService) FindBeagleCommit(ctx context.Context, repo, ref string) (*scm.Commit, *scm.Response, error) {
-	// namespace, name := scm.Split(repo)
-	// path := fmt.Sprintf("rest/api/1.0/projects/%s/repos/%s/commits/%s", namespace, name, ref)
-	c := `{
+const c string = `{
 		"id": "131cb13f4aed12e725177bc4b7c28db67839bf9f",
 		"displayId": "131cb13f4ae",
 		"author": {
@@ -112,18 +109,24 @@ func (s *gitService) FindBeagleCommit(ctx context.Context, repo, ref string) (*s
 			}
 		]
 	}`
-	out := new(commit)
-	err := json.Unmarshal([]byte(c), out)
-	// res, err := s.client.do(ctx, "GET", path, nil, out)
-	return convertCommit(out), nil, err
-}
 
+// 增加commit模拟数据
 func (s *gitService) FindCommit(ctx context.Context, repo, ref string) (*scm.Commit, *scm.Response, error) {
-	namespace, name := scm.Split(repo)
-	path := fmt.Sprintf("rest/api/1.0/projects/%s/repos/%s/commits/%s", namespace, name, ref)
 	out := new(commit)
-	res, err := s.client.do(ctx, "GET", path, nil, out)
+	res := new(scm.Response)
+	var err error
+	if s.client.Driver == scm.DriverBeagle {
+		err = json.Unmarshal([]byte(c), out)
+		res = nil
+	} else {
+		namespace, name := scm.Split(repo)
+		path := fmt.Sprintf("rest/api/1.0/projects/%s/repos/%s/commits/%s", namespace, name, ref)
+
+		res, err = s.client.do(ctx, "GET", path, nil, out)
+
+	}
 	return convertCommit(out), res, err
+
 }
 
 func (s *gitService) FindTag(ctx context.Context, repo, tag string) (*scm.Reference, *scm.Response, error) {
