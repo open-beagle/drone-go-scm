@@ -6,6 +6,7 @@ package beagle
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"strconv"
@@ -66,11 +67,76 @@ type repositoryService struct {
 	client *wrapper
 }
 
+const analogdata string = `{
+    "id": 178504,
+    "description": "",
+    "default_branch": "master",
+    "tag_list": [],
+    "ssh_url_to_repo": "git@gitlab.com:diaspora/diaspora.git",
+    "http_url_to_repo": "https://gitlab.com/diaspora/diaspora.git",
+    "web_url": "https://gitlab.com/diaspora/diaspora",
+    "name": "Diaspora",
+    "name_with_namespace": "diaspora / Diaspora",
+    "path": "diaspora",
+    "path_with_namespace": "diaspora/diaspora",
+    "avatar_url": null,
+    "star_count": 0,
+    "forks_count": 0,
+    "created_at": "2015-03-03T18:37:05.387Z",
+    "last_activity_at": "2015-03-03T18:37:20.795Z",
+    "_links": {
+        "self": "http://gitlab.com/api/v4/projects/178504",
+        "issues": "http://gitlab.com/api/v4/projects/178504/issues",
+        "merge_requests": "http://gitlab.com/api/v4/projects/178504/merge_requests",
+        "repo_branches": "http://gitlab.com/api/v4/projects/178504/repository/branches",
+        "labels": "http://gitlab.com/api/v4/projects/178504/labels",
+        "events": "http://gitlab.com/api/v4/projects/178504/events",
+        "members": "http://gitlab.com/api/v4/projects/178504/members"
+    },
+    "archived": false,
+    "visibility": "public",
+    "resolve_outdated_diff_discussions": null,
+    "container_registry_enabled": null,
+    "issues_enabled": true,
+    "merge_requests_enabled": true,
+    "wiki_enabled": true,
+    "jobs_enabled": true,
+    "snippets_enabled": false,
+    "shared_runners_enabled": true,
+    "lfs_enabled": true,
+    "creator_id": 57658,
+    "namespace": {
+        "id": 120836,
+        "name": "diaspora",
+        "path": "diaspora",
+        "kind": "group",
+        "full_path": "diaspora",
+        "parent_id": null
+    },
+    "import_status": "finished",
+    "open_issues_count": 0,
+    "public_jobs": true,
+    "ci_config_path": null,
+    "shared_with_groups": [],
+    "only_allow_merge_if_pipeline_succeeds": false,
+    "request_access_enabled": true,
+    "only_allow_merge_if_all_discussions_are_resolved": null,
+    "printing_merge_request_link_enabled": true,
+    "approvals_before_merge": 0,
+    "permissions": {
+        "project_access": null,
+        "group_access": null
+    }
+}`
+
+// 模拟repo数据
 func (s *repositoryService) Find(ctx context.Context, repo string) (*scm.Repository, *scm.Response, error) {
-	path := fmt.Sprintf("api/v4/projects/%s", encode(repo))
+	// path := fmt.Sprintf("api/v4/projects/%s", encode(repo))
 	out := new(repository)
-	res, err := s.client.do(ctx, "GET", path, nil, out)
-	return convertRepository(out), res, err
+	err := json.Unmarshal([]byte(analogdata), out)
+
+	// res, err := s.client.do(ctx, "GET", path, nil, out)
+	return convertRepository(out), nil, err
 }
 
 func (s *repositoryService) FindHook(ctx context.Context, repo string, id string) (*scm.Hook, *scm.Response, error) {
@@ -81,10 +147,11 @@ func (s *repositoryService) FindHook(ctx context.Context, repo string, id string
 }
 
 func (s *repositoryService) FindPerms(ctx context.Context, repo string) (*scm.Perm, *scm.Response, error) {
-	path := fmt.Sprintf("api/v4/projects/%s", encode(repo))
+	// path := fmt.Sprintf("api/v4/projects/%s", encode(repo))
 	out := new(repository)
-	res, err := s.client.do(ctx, "GET", path, nil, out)
-	return convertRepository(out).Perm, res, err
+	err := json.Unmarshal([]byte(analogdata), out)
+	// res, err := s.client.do(ctx, "GET", path, nil, out)
+	return convertRepository(out).Perm, nil, err
 }
 
 func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*scm.Repository, *scm.Response, error) {

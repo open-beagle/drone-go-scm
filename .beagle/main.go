@@ -16,7 +16,7 @@ func main() {
 		Transport: &oauth2.Transport{
 			Source: oauth2.StaticTokenSource(
 				&scm.Token{
-					Token: "eyJhbGciOiJIUzUxMiIsImtpZCI6IjEyMyIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIzMzZmZTIxYmJlYTY5OTg0NWM1MjEyYjg1YjJhMWJhYWZjMzAyZDNlMDdkMjcwZjI1YmM5Njc5NTRlZDk5YmM1IiwiZXhwIjoxNjYzNjAxODEzLCJzdWIiOiJyb290In0.PK87rsaVZZaPEe1saN0MxzXjfblL7XAIr9KAI7GMnckMIX9TvtfFnorkKWQ4eIcAdc-RIqmov7C-bUMtLzEspA",
+					Token: "eyJhbGciOiJIUzUxMiIsImtpZCI6IjEyMyIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIzMzZmZTIxYmJlYTY5OTg0NWM1MjEyYjg1YjJhMWJhYWZjMzAyZDNlMDdkMjcwZjI1YmM5Njc5NTRlZDk5YmM1IiwiZXhwIjoxNjYzNjQyNjY3LCJzdWIiOiJyb290In0.kUblBFUUm0Gm0I9kLVIXcic8AYN6PXe8iyjyvcg_gwDEjV3SAAXif10X1YjsHwFO8D7hOgR0PLOceJjfid7oLA",
 				},
 			),
 		},
@@ -41,7 +41,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("FindLogin: ", user.Name, user.Login)
+	fmt.Println("FindLogin: ", user.Name, user.Login, user.Email)
 
 	// ListEmail
 	listemail, _, err := client.Users.ListEmail(ctx, scm.ListOptions{})
