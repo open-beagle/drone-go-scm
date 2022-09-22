@@ -60,4 +60,7 @@ func main() {
 	//
 	fmt.Println(got.Author, res)
 
+	// content
+	g, _, _ := client.Contents.Find(ctx, "test", "t", "tt")
+	fmt.Println(g.Data)
 }
