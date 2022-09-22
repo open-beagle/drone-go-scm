@@ -161,8 +161,12 @@ func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*
 	err := json.Unmarshal([]byte(analogdata), o)
 	out = append(out, o)
 	res := new(scm.Response)
-	// Page.Next不为0
-	res.Page.Next = 10
+	// 根据opts值确定Next大小
+	if opts.Page == 1 {
+		res.Page.Next = 0
+	} else {
+		res.Page.Next = 1
+	}
 	// res, err := s.client.do(ctx, "GET", path, nil, &out)
 	return convertRepositoryList(out), res, err
 }
