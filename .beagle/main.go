@@ -16,7 +16,7 @@ func main() {
 		Transport: &oauth2.Transport{
 			Source: oauth2.StaticTokenSource(
 				&scm.Token{
-					Token: "eyJhbGciOiJIUzUxMiIsImtpZCI6IjEyMyIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIzMzZmZTIxYmJlYTY5OTg0NWM1MjEyYjg1YjJhMWJhYWZjMzAyZDNlMDdkMjcwZjI1YmM5Njc5NTRlZDk5YmM1IiwiZXhwIjoxNjYzNjQyNjY3LCJzdWIiOiJyb290In0.kUblBFUUm0Gm0I9kLVIXcic8AYN6PXe8iyjyvcg_gwDEjV3SAAXif10X1YjsHwFO8D7hOgR0PLOceJjfid7oLA",
+					Token: "eyJhbGciOiJIUzUxMiIsImtpZCI6IjEyMyIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIzMzZmZTIxYmJlYTY5OTg0NWM1MjEyYjg1YjJhMWJhYWZjMzAyZDNlMDdkMjcwZjI1YmM5Njc5NTRlZDk5YmM1IiwiZXhwIjoxNjYzODM1MTE5LCJzdWIiOiJyb290In0.sAsMqmrfiiQYf3akTXBAFM2AbTiUnvewdqjoeYlsSIwOmlXH1I1SlSWrBvlP7tSC-Mk7x6H0e0AE0Ndcyw-W0A",
 				},
 			),
 		},
@@ -51,5 +51,13 @@ func main() {
 	for _, l := range listemail {
 		fmt.Println("ListEmail: ", l.Value)
 	}
+
+	// commit
+	got, _, err := client.Git.FindCommit(context.Background(), "PRJ/my-repo", "131cb13f4aed12e725177bc4b7c28db67839bf9f")
+	if err != nil {
+		fmt.Println(err)
+	}
+	//
+	fmt.Println(got.Author)
 
 }
