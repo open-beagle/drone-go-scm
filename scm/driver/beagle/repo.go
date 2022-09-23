@@ -162,11 +162,12 @@ func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*
 	out = append(out, o)
 	res := new(scm.Response)
 	// 根据opts值确定Next大小
-	if opts.Page == 1 {
-		res.Page.Next = 0
-	} else {
-		res.Page.Next = 1
-	}
+	// if opts.Page == 1 {
+	// 	res.Page.Next = 0
+	// } else {
+	// 	res.Page.Next = 1
+	// }
+	res.Page.Next = 0
 	// res, err := s.client.do(ctx, "GET", path, nil, &out)
 	return convertRepositoryList(out), res, err
 }
@@ -184,6 +185,22 @@ func (s *repositoryService) ListStatus(ctx context.Context, repo, ref string, op
 	res, err := s.client.do(ctx, "GET", path, nil, &out)
 	return convertStatusList(out), res, err
 }
+
+const hookdata string = `{
+    "id": 1,
+    "url": "http://example.com/hook",
+    "project_id": 3,
+    "push_events": true,
+    "issues_events": false,
+    "merge_requests_events": false,
+    "tag_push_events": false,
+    "note_events": false,
+    "job_events": false,
+    "pipeline_events": false,
+    "wiki_page_events": false,
+    "enable_ssl_verification": true,
+    "created_at": "2022-9-23T09:04:47Z"
+}`
 
 func (s *repositoryService) CreateHook(ctx context.Context, repo string, input *scm.HookInput) (*scm.Hook, *scm.Response, error) {
 	params := url.Values{}
@@ -213,11 +230,14 @@ func (s *repositoryService) CreateHook(ctx context.Context, repo string, input *
 	if input.Events.Tag {
 		params.Set("tag_push_events", "true")
 	}
+	// 模拟hook创建
+	fmt.Println(params.Encode())
 
-	path := fmt.Sprintf("api/v4/projects/%s/hooks?%s", encode(repo), params.Encode())
+	// path := fmt.Sprintf("api/v4/projects/%s/hooks?%s", encode(repo), params.Encode())
 	out := new(hook)
-	res, err := s.client.do(ctx, "POST", path, nil, out)
-	return convertHook(out), res, err
+	err := json.Unmarshal([]byte(hookdata), out)
+	// res, err := s.client.do(ctx, "POST", path, nil, out)
+	return convertHook(out), nil, err
 }
 
 const repostatus = `{
@@ -253,6 +273,16 @@ func (s *repositoryService) CreateStatus(ctx context.Context, repo, ref string, 
 
 	out := new(status)
 	err := json.Unmarshal([]byte(repostatus), out)
+	switch input.State {
+	case scm.StatePending:
+		out.Status = "pending"
+	case scm.StateRunning:
+		out.Status = "running"
+	case scm.StateSuccess:
+		out.Status = "success"
+	default:
+		out.Status = "error"
+	}
 	// res, err := s.client.do(ctx, "POST", path, nil, out)
 	return convertStatus(out), nil, err
 }
@@ -261,9 +291,11 @@ func (s *repositoryService) UpdateHook(ctx context.Context, repo string, id stri
 	return nil, nil, scm.ErrNotSupported
 }
 
+// 模拟hook删除
 func (s *repositoryService) DeleteHook(ctx context.Context, repo string, id string) (*scm.Response, error) {
-	path := fmt.Sprintf("api/v4/projects/%s/hooks/%s", encode(repo), id)
-	return s.client.do(ctx, "DELETE", path, nil, nil)
+	// path := fmt.Sprintf("api/v4/projects/%s/hooks/%s", encode(repo), id)
+	// return s.client.do(ctx, "DELETE", path, nil, nil)
+	return nil, nil
 }
 
 // helper function to convert from the gogs repository list to
