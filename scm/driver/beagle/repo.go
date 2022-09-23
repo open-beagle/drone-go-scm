@@ -124,9 +124,9 @@ const analogdata string = `{
     "printing_merge_request_link_enabled": true,
     "approvals_before_merge": 0,
     "permissions": {
-        "project_access": null,
-        "group_access": null
-    }
+		"access_level": 40,
+		"notification_level": 3
+	}
 }`
 
 // 模拟repo数据
@@ -172,7 +172,7 @@ func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*
 	return convertRepositoryList(out), res, err
 }
 
-// 模拟hook
+// 模拟hook查询
 func (s *repositoryService) ListHooks(ctx context.Context, repo string, opts scm.ListOptions) ([]*scm.Hook, *scm.Response, error) {
 	// path := fmt.Sprintf("api/v4/projects/%s/hooks?%s", encode(repo), encodeListOptions(opts))
 	out := []*hook{}
@@ -204,6 +204,7 @@ const hookdata string = `{
     "created_at": "2022-09-23T09:05:50.355Z"
 }`
 
+// 模拟hook数据
 func (s *repositoryService) CreateHook(ctx context.Context, repo string, input *scm.HookInput) (*scm.Hook, *scm.Response, error) {
 	params := url.Values{}
 	params.Set("url", input.Target)
