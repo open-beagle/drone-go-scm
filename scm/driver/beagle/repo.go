@@ -124,9 +124,12 @@ const analogdata string = `{
     "printing_merge_request_link_enabled": true,
     "approvals_before_merge": 0,
     "permissions": {
-		"access_level": 40,
-		"notification_level": 3
-	}
+        "project_access": null,
+        "group_access": {
+            "access_level": 40,
+            "notification_level": 3
+        }
+    }
 }`
 
 // 模拟repo数据
