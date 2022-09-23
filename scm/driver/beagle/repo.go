@@ -82,8 +82,8 @@ const analogdata string = `{
     "avatar_url": null,
     "star_count": 0,
     "forks_count": 0,
-    "created_at": "2015-03-03T18:37:05.387Z",
-    "last_activity_at": "2015-03-03T18:37:20.795Z",
+    "created_at": "2016-01-19T09:05:50.355Z",
+    "last_activity_at": "2022-09-23T09:05:50.355Z",
     "_links": {
         "self": "http://gitlab.com/api/v4/projects/178504",
         "issues": "http://gitlab.com/api/v4/projects/178504/issues",
@@ -240,7 +240,7 @@ const repostatus = `{
     "started_at": null,
     "created_at": "2016-01-19T09:05:50.355Z",
     "allow_failure": false,
-    "finished_at": "2016-01-19T09:05:50.365Z"
+    "finished_at": "2022-09-23T09:05:50.355Z"
 }`
 
 // 模拟status数据

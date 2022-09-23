@@ -28,7 +28,7 @@ const contentData = `{
     "ref": "master",
     "blob_id": "79f7bbd25901e8334750839545a9bd021f0e4c83",
     "commit_id": "d5a3ff139356ce33e37e73add446f16869741b50",
-    "last_commit_id": "570e7b2abdd848b95f2f578043fc23bd6f6fd24d"
+    "last_commit_id": "6104942438c14ec7bd21c6cd5bd995272b3faff6"
 }`
 
 // 增加模拟数据
