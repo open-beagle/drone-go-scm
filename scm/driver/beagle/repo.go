@@ -201,7 +201,7 @@ const hookdata string = `{
     "pipeline_events": false,
     "wiki_page_events": false,
     "enable_ssl_verification": true,
-    "created_at": "2022-9-23T09:04:47Z"
+    "created_at": "2022-09-23T09:05:50.355Z"
 }`
 
 func (s *repositoryService) CreateHook(ctx context.Context, repo string, input *scm.HookInput) (*scm.Hook, *scm.Response, error) {
