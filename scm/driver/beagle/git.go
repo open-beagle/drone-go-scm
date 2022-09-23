@@ -23,8 +23,8 @@ const commitData string = `{
     "title": "Sanitize for network graph",
     "author_name": "root",
     "author_email": "root@wodcloud.com",
-    "committer_name": "test",
-    "committer_email": "test@wodcloud.com",
+    "committer_name": "root",
+    "committer_email": "root@wodcloud.com",
     "created_at": "2012-06-28T03:44:20-07:00",
     "message": "drone测试",
     "committed_date": "2012-06-28T03:44:20-07:00",
@@ -46,6 +46,30 @@ const commitData string = `{
     "status": "running"
 }`
 
+const branchData string = `
+{
+    "name": "master",
+    "merged": false,
+    "protected": true,
+    "developers_can_push": false,
+    "developers_can_merge": false,
+    "commit": {
+        "author_email": "root@wodcloud.com",
+        "author_name": "root",
+        "authored_date": "2012-06-28T03:44:20-07:00",
+        "committed_date": "2012-06-28T03:44:20-07:00",
+        "committer_email": "root@wodcloud.com",
+        "committer_name": "root",
+        "id": "6104942438c14ec7bd21c6cd5bd995272b3faff6",
+        "short_id": "6104942438c",
+        "title": "Sanitize for network graphI",
+        "message": "drone测试",
+        "parent_ids": [
+            "ae1d9fb46aa2b07ee9836d49862ec4e2c46fbbba"
+        ]
+    }
+}`
+
 func (s *gitService) CreateBranch(ctx context.Context, repo string, params *scm.ReferenceInput) (*scm.Response, error) {
 	path := fmt.Sprintf("api/v4/projects/%s/repository/branches", encode(repo))
 	in := &createBranch{
@@ -55,11 +79,13 @@ func (s *gitService) CreateBranch(ctx context.Context, repo string, params *scm.
 	return s.client.do(ctx, "POST", path, in, nil)
 }
 
+// 模拟branch数据
 func (s *gitService) FindBranch(ctx context.Context, repo, name string) (*scm.Reference, *scm.Response, error) {
-	path := fmt.Sprintf("api/v4/projects/%s/repository/branches/%s", encode(repo), name)
+	// path := fmt.Sprintf("api/v4/projects/%s/repository/branches/%s", encode(repo), name)
 	out := new(branch)
-	res, err := s.client.do(ctx, "GET", path, nil, out)
-	return convertBranch(out), res, err
+	err := json.Unmarshal([]byte(branchData), out)
+	// res, err := s.client.do(ctx, "GET", path, nil, out)
+	return convertBranch(out), nil, err
 }
 
 // 模拟commit数据
