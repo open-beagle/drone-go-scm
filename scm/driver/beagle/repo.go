@@ -8,7 +8,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -142,11 +141,13 @@ func (s *repositoryService) Find(ctx context.Context, repo string) (*scm.Reposit
 	return convertRepository(out), nil, err
 }
 
+//
 func (s *repositoryService) FindHook(ctx context.Context, repo string, id string) (*scm.Hook, *scm.Response, error) {
-	path := fmt.Sprintf("api/v4/projects/%s/hooks/%s", encode(repo), id)
-	out := new(hook)
-	res, err := s.client.do(ctx, "GET", path, nil, out)
-	return convertHook(out), res, err
+	// path := fmt.Sprintf("api/v4/projects/%s/hooks/%s", encode(repo), id)
+	// out := new(hook)
+	// res, err := s.client.do(ctx, "GET", path, nil, out)
+	// return convertHook(out), res, err
+	return nil, nil, nil
 }
 
 func (s *repositoryService) FindPerms(ctx context.Context, repo string) (*scm.Perm, *scm.Response, error) {
@@ -178,10 +179,10 @@ func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*
 // 模拟hook查询
 func (s *repositoryService) ListHooks(ctx context.Context, repo string, opts scm.ListOptions) ([]*scm.Hook, *scm.Response, error) {
 	// path := fmt.Sprintf("api/v4/projects/%s/hooks?%s", encode(repo), encodeListOptions(opts))
-	out := []*hook{}
+	// out := []*hook{}
 
 	// res, err := s.client.do(ctx, "GET", path, nil, &out)
-	return convertHookList(out), nil, nil
+	return nil, nil, nil
 }
 
 func (s *repositoryService) ListStatus(ctx context.Context, repo, ref string, opts scm.ListOptions) ([]*scm.Status, *scm.Response, error) {
@@ -209,41 +210,42 @@ const hookdata string = `{
 
 // 模拟hook数据
 func (s *repositoryService) CreateHook(ctx context.Context, repo string, input *scm.HookInput) (*scm.Hook, *scm.Response, error) {
-	params := url.Values{}
-	params.Set("url", input.Target)
-	if input.Secret != "" {
-		params.Set("token", input.Secret)
-	}
-	if input.SkipVerify {
-		params.Set("enable_ssl_verification", "false")
-	}
-	if input.Events.Branch {
-		// no-op
-	}
-	if input.Events.Issue {
-		params.Set("issues_events", "true")
-	}
-	if input.Events.IssueComment ||
-		input.Events.PullRequestComment {
-		params.Set("note_events", "true")
-	}
-	if input.Events.PullRequest {
-		params.Set("merge_requests_events", "true")
-	}
-	if input.Events.Push || input.Events.Branch {
-		params.Set("push_events", "true")
-	}
-	if input.Events.Tag {
-		params.Set("tag_push_events", "true")
-	}
-	// 模拟hook创建
-	fmt.Println(params.Encode())
+	// params := url.Values{}
+	// params.Set("url", input.Target)
+	// if input.Secret != "" {
+	// 	params.Set("token", input.Secret)
+	// }
+	// if input.SkipVerify {
+	// 	params.Set("enable_ssl_verification", "false")
+	// }
+	// if input.Events.Branch {
+	// 	// no-op
+	// }
+	// if input.Events.Issue {
+	// 	params.Set("issues_events", "true")
+	// }
+	// if input.Events.IssueComment ||
+	// 	input.Events.PullRequestComment {
+	// 	params.Set("note_events", "true")
+	// }
+	// if input.Events.PullRequest {
+	// 	params.Set("merge_requests_events", "true")
+	// }
+	// if input.Events.Push || input.Events.Branch {
+	// 	params.Set("push_events", "true")
+	// }
+	// if input.Events.Tag {
+	// 	params.Set("tag_push_events", "true")
+	// }
+	// // 模拟hook创建
+	// fmt.Println(params.Encode())
 
-	// path := fmt.Sprintf("api/v4/projects/%s/hooks?%s", encode(repo), params.Encode())
-	out := new(hook)
-	err := json.Unmarshal([]byte(hookdata), out)
-	// res, err := s.client.do(ctx, "POST", path, nil, out)
-	return convertHook(out), nil, err
+	// // path := fmt.Sprintf("api/v4/projects/%s/hooks?%s", encode(repo), params.Encode())
+	// out := new(hook)
+	// err := json.Unmarshal([]byte(hookdata), out)
+	// // res, err := s.client.do(ctx, "POST", path, nil, out)
+	// return convertHook(out), nil, err
+	return nil, nil, nil
 }
 
 const repostatus = `{
