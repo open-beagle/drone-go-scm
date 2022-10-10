@@ -7,7 +7,6 @@ package beagle
 import (
 	"context"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"net/url"
 	"strconv"
@@ -19,40 +18,21 @@ type contentService struct {
 	client *wrapper
 }
 
-const contentData = `{
-    "file_name": ".beagle.yml",
-    "file_path": ".beagle.yml",
-    "size": 1476,
-    "encoding": "base64",
-    "content": "a2luZDogcGlwZWxpbmUKdHlwZTogZG9ja2VyCm5hbWU6IGRlZmF1bHQKCmNsb25lOgogIGRpc2FibGU6IHRydWUKCnN0ZXBzOgotIG5hbWU6IGdyZWV0aW5nCiAgaW1hZ2U6IHJlZ2lzdHJ5LmNuLXFpbmdkYW8uYWxpeXVuY3MuY29tL3dvZC9hbHBpbmU6My4xMwogIGNvbW1hbmRzOgogIC0gdW5hbWUgLWEK",
-    "ref": "master",
-    "blob_id": "79f7bbd25901e8334750839545a9bd021f0e4c83",
-    "commit_id": "d5a3ff139356ce33e37e73add446f16869741b50",
-    "last_commit_id": "6104942438c14ec7bd21c6cd5bd995272b3faff6"
-}`
-
 // 增加模拟数据
 func (s *contentService) Find(ctx context.Context, repo, path, ref string) (*scm.Content, *scm.Response, error) {
-	// endpoint := fmt.Sprintf("api/v4/projects/%s/repository/files/%s?ref=%s", encode(repo), encodePath(path), ref)
+	endpoint := fmt.Sprintf("awecloud/lzjciApi/devops/object/%s?ref=%s&path=%s", repo, ref, path)
 	out := new(content)
-	err := json.Unmarshal([]byte(contentData), out)
-
-	// res, err := s.client.do(ctx, "GET", endpoint, nil, out)
+	res, err := s.client.do(ctx, "GET", endpoint, nil, out)
 	raw, berr := base64.StdEncoding.DecodeString(out.Content)
 	if berr != nil {
-		// samples in the gitlab documentation use RawStdEncoding
-		// so we fallback if StdEncoding returns an error.
-		raw, berr = base64.RawStdEncoding.DecodeString(out.Content)
-		if berr != nil {
-			return nil, nil, err
-		}
+		return nil, nil, err
 	}
 	return &scm.Content{
 		Path:   out.FilePath,
 		Data:   raw,
 		Sha:    out.LastCommitID,
 		BlobID: out.BlobID,
-	}, nil, err
+	}, res, err
 }
 
 func (s *contentService) Create(ctx context.Context, repo, path string, params *scm.ContentParams) (*scm.Response, error) {
