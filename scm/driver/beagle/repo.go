@@ -13,6 +13,10 @@ import (
 	"github.com/drone/go-scm/scm"
 )
 
+type repositories struct {
+	Data []repository `json:"Data"`
+}
+
 type repository struct {
 	Id            int64     `json:"id"`
 	ProjectName   string    `json:"projectName"`
@@ -82,9 +86,10 @@ func (s *repositoryService) FindPerms(ctx context.Context, repo string) (*scm.Pe
 
 func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*scm.Repository, *scm.Response, error) {
 	path := fmt.Sprintf("awecloud/lzjciApi/devops/project/?%s", encodeMemberListOptions(opts))
+	outs := new(repositories)
 	out := []*repository{}
-	res := new(scm.Response)
-	res, err := s.client.do(ctx, "GET", path, nil, &out)
+	res, err := s.client.do(ctx, "GET", path, nil, &outs)
+	out = convertRepositories(outs)
 	return convertRepositoryList(out), res, err
 }
 
@@ -182,4 +187,12 @@ func canAdmin(proj *repository) bool {
 	default:
 		return false
 	}
+}
+
+func convertRepositories(from *repositories) []*repository {
+	out := []*repository{}
+	for _, o := range from.Data {
+		out = append(out, &o)
+	}
+	return out
 }
