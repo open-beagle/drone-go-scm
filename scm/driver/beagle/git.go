@@ -16,35 +16,6 @@ type gitService struct {
 	client *wrapper
 }
 
-const commitData string = `{
-    "id": "6104942438c14ec7bd21c6cd5bd995272b3faff6",
-    "short_id": "6104942438c",
-    "title": "Sanitize for network graph",
-    "author_name": "root",
-    "author_email": "root@wodcloud.com",
-    "committer_name": "root",
-    "committer_email": "root@wodcloud.com",
-    "created_at": "2022-09-23T09:05:50.355Z",
-    "message": "drone测试",
-    "committed_date": "2022-09-23T09:05:50.355Z",
-    "authored_date": "2022-09-23T09:05:50.355Z",
-    "parent_ids": [
-        "ae1d9fb46aa2b07ee9836d49862ec4e2c46fbbba"
-    ],
-    "last_pipeline": {
-        "id": 8,
-        "ref": "master",
-        "sha": "2dc6aa325a317eda67812f05600bdf0fcdc70ab0",
-        "status": "created"
-    },
-    "stats": {
-        "additions": 15,
-        "deletions": 10,
-        "total": 25
-    },
-    "status": "running"
-}`
-
 func (s *gitService) CreateBranch(ctx context.Context, repo string, params *scm.ReferenceInput) (*scm.Response, error) {
 	path := fmt.Sprintf("api/v4/projects/%s/repository/branches", encode(repo))
 	in := &createBranch{
