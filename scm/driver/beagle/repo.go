@@ -14,8 +14,8 @@ import (
 )
 
 type repositories struct {
-	Data     []repository `json:"Data"`
-	NextPage int          `json:"NextPage"`
+	Data     []*repository `json:"Data"`
+	NextPage int           `json:"NextPage"`
 }
 
 type repository struct {
@@ -87,9 +87,9 @@ func (s *repositoryService) FindPerms(ctx context.Context, repo string) (*scm.Pe
 
 func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*scm.Repository, *scm.Response, error) {
 	path := fmt.Sprintf("awecloud/lzjciApi/devops/project/?%s", encodeMemberListOptions(opts))
-	outs := repositories{}
+	outs := new(repositories)
 	out := []*repository{}
-	res, err := s.client.do(ctx, "GET", path, nil, outs)
+	res, err := s.client.do(ctx, "GET", path, nil, &outs)
 	out = convertRepositories(outs)
 	res.Page.Next = outs.NextPage
 	return convertRepositoryList(out), res, err
@@ -137,7 +137,7 @@ func convertRepository(from *repository) *scm.Repository {
 		Namespace:  from.GroupName,
 		Name:       from.ProjectName,
 		Branch:     from.DefaultBranch,
-		Archived:   false,
+		Archived:   true,
 		Private:    convertPrivate(from.Private),
 		Visibility: convertVisibility(from.Private),
 		Perm: &scm.Perm{
@@ -191,10 +191,11 @@ func canAdmin(proj *repository) bool {
 	}
 }
 
-func convertRepositories(from repositories) []*repository {
+func convertRepositories(from *repositories) []*repository {
 	out := []*repository{}
+
 	for _, o := range from.Data {
-		out = append(out, &o)
+		out = append(out, o)
 	}
 	return out
 }
