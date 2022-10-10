@@ -86,11 +86,11 @@ func (c *wrapper) do(ctx context.Context, method, path string, in, out interface
 	if in != nil {
 		buf := new(bytes.Buffer)
 		json.NewEncoder(buf).Encode(in)
-		req.Header = map[string][]string{
-			"Content-Type": {"application/json"},
-		}
 		//添加获取用户信息header
-		req.Header.Add("Authorization", "Bearer "+token.Access)
+		req.Header = map[string][]string{
+			"Content-Type":  {"application/json"},
+			"Authorization": {"Bearer " + token.Access},
+		}
 		req.Body = buf
 	}
 

@@ -6,7 +6,6 @@ package beagle
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -46,30 +45,6 @@ const commitData string = `{
     "status": "running"
 }`
 
-const branchData string = `
-{
-    "name": "master",
-    "merged": false,
-    "protected": true,
-    "developers_can_push": false,
-    "developers_can_merge": false,
-    "commit": {
-        "author_email": "root@wodcloud.com",
-        "author_name": "root",
-        "authored_date": "2022-09-23T09:05:50.355Z",
-        "committed_date": "2022-09-23T09:05:50.355Z",
-        "committer_email": "root@wodcloud.com",
-        "committer_name": "root",
-        "id": "6104942438c14ec7bd21c6cd5bd995272b3faff6",
-        "short_id": "6104942438c",
-        "title": "Sanitize for network graphI",
-        "message": "drone测试",
-        "parent_ids": [
-            "ae1d9fb46aa2b07ee9836d49862ec4e2c46fbbba"
-        ]
-    }
-}`
-
 func (s *gitService) CreateBranch(ctx context.Context, repo string, params *scm.ReferenceInput) (*scm.Response, error) {
 	path := fmt.Sprintf("api/v4/projects/%s/repository/branches", encode(repo))
 	in := &createBranch{
@@ -82,25 +57,19 @@ func (s *gitService) CreateBranch(ctx context.Context, repo string, params *scm.
 // 模拟branch数据
 func (s *gitService) FindBranch(ctx context.Context, repo, name string) (*scm.Reference, *scm.Response, error) {
 	// path := fmt.Sprintf("api/v4/projects/%s/repository/branches/%s", encode(repo), name)
-	out := new(branch)
-	err := json.Unmarshal([]byte(branchData), out)
+	// out := new(branch)
+	// err := json.Unmarshal([]byte(branchData), out)
 	// res, err := s.client.do(ctx, "GET", path, nil, out)
-	return convertBranch(out), nil, err
+	// return convertBranch(out), nil, err
+	return nil, nil, scm.ErrNotSupported
 }
 
 // 模拟commit数据
 func (s *gitService) FindCommit(ctx context.Context, repo, ref string) (*scm.Commit, *scm.Response, error) {
-	// if the reference is a branch, ensure forward slashes
-	// in the branch name are escaped.
+	path := fmt.Sprintf("awecloud/lzjciApi/devops/object/%s/%s/commits", encode(repo), ref)
 	out := new(commit)
-	// if strings.Contains("ref", "/") {
-	// 	ref = url.PathEscape(ref)
-	// }
-	// path := fmt.Sprintf("api/v4/projects/%s/repository/commits/%s", encode(repo), scm.TrimRef(ref))
-	// out := new(commit)
-	// res, err := s.client.do(ctx, "GET", path, nil, out)
-	err := json.Unmarshal([]byte(commitData), out)
-	return convertCommit(out), nil, err
+	res, err := s.client.do(ctx, "GET", path, nil, out)
+	return convertCommit(out), res, err
 }
 
 func (s *gitService) FindTag(ctx context.Context, repo, name string) (*scm.Reference, *scm.Response, error) {
@@ -158,16 +127,13 @@ type createBranch struct {
 }
 
 type commit struct {
-	ID             string    `json:"id"`
-	Title          string    `json:"title"`
-	Message        string    `json:"message"`
-	AuthorName     string    `json:"author_name"`
-	AuthorEmail    string    `json:"author_email"`
-	AuthorDate     time.Time `json:"authored_date"`
-	CommittedDate  time.Time `json:"committed_date"`
-	CommitterName  string    `json:"committer_name"`
-	CommitterEmail string    `json:"committer_email"`
-	Created        time.Time `json:"created_at"`
+	ID            string    `json:"id"`
+	Message       string    `json:"message"`
+	AuthorName    string    `json:"author_name"`
+	AuthorDate    time.Time `json:"authored_date"`
+	CommittedDate time.Time `json:"committed_date"`
+	CommitterName string    `json:"committer_name"`
+	Created       time.Time `json:"created_at"`
 }
 
 type compare struct {
@@ -197,13 +163,11 @@ func convertCommit(from *commit) *scm.Commit {
 		Author: scm.Signature{
 			Login: from.AuthorName,
 			Name:  from.AuthorName,
-			Email: from.AuthorEmail,
 			Date:  from.AuthorDate,
 		},
 		Committer: scm.Signature{
 			Login: from.CommitterName,
 			Name:  from.CommitterName,
-			Email: from.CommitterEmail,
 			Date:  from.CommittedDate,
 		},
 	}
