@@ -96,7 +96,7 @@ func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*
 }
 
 func (s *repositoryService) ListHooks(ctx context.Context, repo string, opts scm.ListOptions) ([]*scm.Hook, *scm.Response, error) {
-	return nil, nil, scm.ErrNotSupported
+	return nil, nil, nil
 }
 
 func (s *repositoryService) ListStatus(ctx context.Context, repo, ref string, opts scm.ListOptions) ([]*scm.Status, *scm.Response, error) {
@@ -112,7 +112,7 @@ func (s *repositoryService) CreateStatus(ctx context.Context, repo, ref string, 
 }
 
 func (s *repositoryService) UpdateHook(ctx context.Context, repo string, id string, input *scm.HookInput) (*scm.Hook, *scm.Response, error) {
-	return nil, nil, nil
+	return nil, nil, scm.ErrNotSupported
 }
 
 func (s *repositoryService) DeleteHook(ctx context.Context, repo string, id string) (*scm.Response, error) {
