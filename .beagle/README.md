@@ -37,7 +37,7 @@ git push -f origin v1.24.0-beagle
 git tag -d v1.24.0-beagle
 
 # 删除远程仓库tag
-git push origin :refs/tags/v1.24.0-beagle.13
+git push origin :refs/tags/v1.24.0-beagle.27
 ```
 
 
