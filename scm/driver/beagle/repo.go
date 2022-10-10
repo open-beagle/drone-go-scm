@@ -87,9 +87,9 @@ func (s *repositoryService) FindPerms(ctx context.Context, repo string) (*scm.Pe
 
 func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*scm.Repository, *scm.Response, error) {
 	path := fmt.Sprintf("awecloud/lzjciApi/devops/project/?%s", encodeMemberListOptions(opts))
-	outs := new(repositories)
+	outs := repositories{}
 	out := []*repository{}
-	res, err := s.client.do(ctx, "GET", path, nil, &outs)
+	res, err := s.client.do(ctx, "GET", path, nil, outs)
 	out = convertRepositories(outs)
 	res.Page.Next = outs.NextPage
 	return convertRepositoryList(out), res, err
@@ -191,7 +191,7 @@ func canAdmin(proj *repository) bool {
 	}
 }
 
-func convertRepositories(from *repositories) []*repository {
+func convertRepositories(from repositories) []*repository {
 	out := []*repository{}
 	for _, o := range from.Data {
 		out = append(out, &o)
