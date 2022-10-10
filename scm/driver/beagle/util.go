@@ -37,7 +37,7 @@ func encodeListOptions(opts scm.ListOptions) string {
 
 func encodeMemberListOptions(opts scm.ListOptions) string {
 	params := url.Values{}
-	params.Set("membership", "true")
+	// params.Set("membership", "true")
 	if opts.Page != 0 {
 		params.Set("page", strconv.Itoa(opts.Page))
 	}
