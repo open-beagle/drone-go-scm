@@ -14,7 +14,8 @@ import (
 )
 
 type repositories struct {
-	Data []repository `json:"Data"`
+	Data     []repository `json:"Data"`
+	NextPage int          `json:"NextPage"`
 }
 
 type repository struct {
@@ -90,6 +91,7 @@ func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*
 	out := []*repository{}
 	res, err := s.client.do(ctx, "GET", path, nil, &outs)
 	out = convertRepositories(outs)
+	res.Page.Next = outs.NextPage
 	return convertRepositoryList(out), res, err
 }
 
