@@ -7,6 +7,7 @@ package beagle
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/drone/go-scm/scm"
@@ -98,7 +99,7 @@ type createBranch struct {
 }
 
 type commit struct {
-	ID            string    `json:"id"`
+	ID            int64     `json:"id"`
 	Message       string    `json:"message"`
 	AuthorName    string    `json:"author_name"`
 	AuthorDate    time.Time `json:"authored_date"`
@@ -130,7 +131,7 @@ func convertCommitList(from []*commit) []*scm.Commit {
 func convertCommit(from *commit) *scm.Commit {
 	return &scm.Commit{
 		Message: from.Message,
-		Sha:     from.ID,
+		Sha:     strconv.Itoa(int(from.ID)),
 		Author: scm.Signature{
 			Login: from.AuthorName,
 			Name:  from.AuthorName,
