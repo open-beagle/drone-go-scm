@@ -101,25 +101,6 @@ func (c *wrapper) do(ctx context.Context, method, path string, in, out interface
 	}
 	defer res.Body.Close()
 
-	// // parse the gitlab request id.
-	// res.ID = res.Header.Get("X-Request-Id")
-
-	// // parse the gitlab rate limit details.
-	// res.Rate.Limit, _ = strconv.Atoi(
-	// 	res.Header.Get("RateLimit-Limit"),
-	// )
-	// res.Rate.Remaining, _ = strconv.Atoi(
-	// 	res.Header.Get("RateLimit-Remaining"),
-	// )
-	// res.Rate.Reset, _ = strconv.ParseInt(
-	// 	res.Header.Get("RateLimit-Reset"), 10, 64,
-	// )
-
-	// // snapshot the request rate limit
-	// c.Client.SetRate(res.Rate)
-
-	// if an error is encountered, unmarshal and return the
-	// error response.
 	if res.Status > 300 {
 		err := new(Error)
 		json.NewDecoder(res.Body).Decode(err)
