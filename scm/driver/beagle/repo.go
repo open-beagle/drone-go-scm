@@ -136,7 +136,7 @@ func convertRepository(from *repository) *scm.Repository {
 		Namespace:  from.GroupName,
 		Name:       from.ProjectName,
 		Branch:     from.DefaultBranch,
-		Archived:   true,
+		Archived:   false,
 		Private:    convertPrivate(from.Private),
 		Visibility: convertVisibility(from.Private),
 		Perm: &scm.Perm{
