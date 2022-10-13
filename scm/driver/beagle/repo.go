@@ -14,8 +14,8 @@ import (
 )
 
 type repositories struct {
-	Data     []*repository `json:"Data"`
-	NextPage int           `json:"NextPage"`
+	Data     []*repository `json:"data"`
+	NextPage int           `json:"nextPage"`
 }
 
 type repository struct {
@@ -25,40 +25,13 @@ type repository struct {
 	Author        string    `json:"author"`
 	Private       int       `json:"private"`
 	GroupName     string    `json:"groupName"`
-	DefaultBranch string    `json:"default_branch"`
+	DefaultBranch string    `json:"defaultBranch"`
 	AccessLevel   access    `json:"access"`
 }
 
 type access struct {
 	GroupAccessLevel   int64 `json:"groupAccessLevel"`   //组权限
 	ProjectAccessLevel int64 `json:"projectAccessLevel"` //项目权限
-}
-
-type namespace struct {
-	Name     string `json:"name"`
-	Path     string `json:"path"`
-	FullPath string `json:"full_path"`
-}
-
-type permissions struct {
-	ProjectAccess access `json:"project_access"`
-	GroupAccess   access `json:"group_access"`
-}
-
-type hook struct {
-	ID                    int       `json:"id"`
-	URL                   string    `json:"url"`
-	ProjectID             int       `json:"project_id"`
-	PushEvents            bool      `json:"push_events"`
-	IssuesEvents          bool      `json:"issues_events"`
-	MergeRequestsEvents   bool      `json:"merge_requests_events"`
-	TagPushEvents         bool      `json:"tag_push_events"`
-	NoteEvents            bool      `json:"note_events"`
-	JobEvents             bool      `json:"job_events"`
-	PipelineEvents        bool      `json:"pipeline_events"`
-	WikiPageEvents        bool      `json:"wiki_page_events"`
-	EnableSslVerification bool      `json:"enable_ssl_verification"`
-	CreatedAt             time.Time `json:"created_at"`
 }
 
 type repositoryService struct {

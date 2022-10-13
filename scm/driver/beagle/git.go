@@ -38,50 +38,26 @@ func (s *gitService) FindCommit(ctx context.Context, repo, ref string) (*scm.Com
 }
 
 func (s *gitService) FindTag(ctx context.Context, repo, name string) (*scm.Reference, *scm.Response, error) {
-	// path := fmt.Sprintf("api/v4/projects/%s/repository/tags/%s", encode(repo), name)
-	// out := new(branch)
-	// res, err := s.client.do(ctx, "GET", path, nil, out)
-	// return convertTag(out), res, err
 	return nil, nil, scm.ErrNotSupported
 }
 
 func (s *gitService) ListBranches(ctx context.Context, repo string, opts scm.ListOptions) ([]*scm.Reference, *scm.Response, error) {
-	// path := fmt.Sprintf("api/v4/projects/%s/repository/branches?%s", encode(repo), encodeListOptions(opts))
-	// out := []*branch{}
-	// res, err := s.client.do(ctx, "GET", path, nil, &out)
-	// return convertBranchList(out), res, err
 	return nil, nil, scm.ErrNotSupported
 }
 
 func (s *gitService) ListCommits(ctx context.Context, repo string, opts scm.CommitListOptions) ([]*scm.Commit, *scm.Response, error) {
-	// path := fmt.Sprintf("api/v4/projects/%s/repository/commits?%s", encode(repo), encodeCommitListOptions(opts))
-	// out := []*commit{}
-	// res, err := s.client.do(ctx, "GET", path, nil, &out)
-	// return convertCommitList(out), res, err
 	return nil, nil, scm.ErrNotSupported
 }
 
 func (s *gitService) ListTags(ctx context.Context, repo string, opts scm.ListOptions) ([]*scm.Reference, *scm.Response, error) {
-	// path := fmt.Sprintf("api/v4/projects/%s/repository/tags?%s", encode(repo), encodeListOptions(opts))
-	// out := []*branch{}
-	// res, err := s.client.do(ctx, "GET", path, nil, &out)
-	// return convertTagList(out), res, err
 	return nil, nil, scm.ErrNotSupported
 }
 
 func (s *gitService) ListChanges(ctx context.Context, repo, ref string, opts scm.ListOptions) ([]*scm.Change, *scm.Response, error) {
-	// path := fmt.Sprintf("api/v4/projects/%s/repository/commits/%s/diff", encode(repo), ref)
-	// out := []*change{}
-	// res, err := s.client.do(ctx, "GET", path, nil, &out)
-	// return convertChangeList(out), res, err
 	return nil, nil, scm.ErrNotSupported
 }
 
 func (s *gitService) CompareChanges(ctx context.Context, repo, source, target string, _ scm.ListOptions) ([]*scm.Change, *scm.Response, error) {
-	// path := fmt.Sprintf("api/v4/projects/%s/repository/compare?from=%s&to=%s", encode(repo), source, target)
-	// out := new(compare)
-	// res, err := s.client.do(ctx, "GET", path, nil, &out)
-	// return convertChangeList(out.Diffs), res, err
 	return nil, nil, scm.ErrNotSupported
 }
 
@@ -100,11 +76,10 @@ type createBranch struct {
 type commit struct {
 	ID            int64     `json:"id"`
 	Message       string    `json:"message"`
-	AuthorName    string    `json:"author_name"`
-	AuthorDate    time.Time `json:"authored_date"`
-	CommittedDate time.Time `json:"committed_date"`
-	CommitterName string    `json:"committer_name"`
-	Created       time.Time `json:"created_at"`
+	AuthorName    string    `json:"authorName"`
+	AuthorDate    time.Time `json:"authoredDate"`
+	CommittedDate time.Time `json:"committedDate"`
+	CommitterName string    `json:"committerName"`
 }
 
 type compare struct {

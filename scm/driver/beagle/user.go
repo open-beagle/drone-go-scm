@@ -66,11 +66,6 @@ type spec struct {
 	Email string `json:"email"`
 }
 
-// type email struct {
-// 	Email     string      `json:"email"`
-// 	Confirmed null.String `json:"confirmed_at"`
-// }
-
 // helper function to convert from the gitlab user structure to
 // the common user structure.
 func convertUser(from *user) *scm.User {
