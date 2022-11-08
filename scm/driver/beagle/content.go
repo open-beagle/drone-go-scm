@@ -17,7 +17,7 @@ type contentService struct {
 }
 
 func (s *contentService) Find(ctx context.Context, repo, path, ref string) (*scm.Content, *scm.Response, error) {
-	endpoint := fmt.Sprintf("awecloud/ciApi/devops/object/%s?ref=%s&path=%s", repo, ref, path)
+	endpoint := fmt.Sprintf("awecloud/migrationApi/devops/version/drone/%s?ref=%s&path=%s", repo, ref, path)
 	out := new(content)
 	res, err := s.client.do(ctx, "GET", endpoint, nil, out)
 	raw, berr := base64.StdEncoding.DecodeString(out.Content)

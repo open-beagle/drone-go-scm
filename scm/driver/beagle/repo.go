@@ -39,26 +39,25 @@ type repositoryService struct {
 }
 
 func (s *repositoryService) Find(ctx context.Context, repo string) (*scm.Repository, *scm.Response, error) {
-	path := fmt.Sprintf("awecloud/ciApi/devops/project/%s", repo)
+	path := fmt.Sprintf("awecloud/migrationApi/devops/project/drone/%s", repo)
 	out := new(repository)
 	res, err := s.client.do(ctx, "GET", path, nil, out)
 	return convertRepository(out), res, err
 }
 
-//
 func (s *repositoryService) FindHook(ctx context.Context, repo string, id string) (*scm.Hook, *scm.Response, error) {
 	return nil, nil, nil
 }
 
 func (s *repositoryService) FindPerms(ctx context.Context, repo string) (*scm.Perm, *scm.Response, error) {
-	path := fmt.Sprintf("awecloud/ciApi/devops/project/%s", repo)
+	path := fmt.Sprintf("awecloud/migrationApi/devops/project/drone/%s", repo)
 	out := new(repository)
 	res, err := s.client.do(ctx, "GET", path, nil, out)
 	return convertRepository(out).Perm, res, err
 }
 
 func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*scm.Repository, *scm.Response, error) {
-	path := fmt.Sprintf("awecloud/ciApi/devops/project/?%s", encodeMemberListOptions(opts))
+	path := fmt.Sprintf("awecloud/migrationApi/devops/project/drone?%s", encodeMemberListOptions(opts))
 	outs := new(repositories)
 	out := []*repository{}
 	res, err := s.client.do(ctx, "GET", path, nil, &outs)

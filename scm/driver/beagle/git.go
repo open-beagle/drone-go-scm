@@ -18,12 +18,7 @@ type gitService struct {
 }
 
 func (s *gitService) CreateBranch(ctx context.Context, repo string, params *scm.ReferenceInput) (*scm.Response, error) {
-	path := fmt.Sprintf("api/v4/projects/%s/repository/branches", encode(repo))
-	in := &createBranch{
-		Branch: params.Name,
-		Ref:    params.Sha,
-	}
-	return s.client.do(ctx, "POST", path, in, nil)
+	return nil, scm.ErrNotSupported
 }
 
 func (s *gitService) FindBranch(ctx context.Context, repo, name string) (*scm.Reference, *scm.Response, error) {
@@ -31,7 +26,7 @@ func (s *gitService) FindBranch(ctx context.Context, repo, name string) (*scm.Re
 }
 
 func (s *gitService) FindCommit(ctx context.Context, repo, ref string) (*scm.Commit, *scm.Response, error) {
-	path := fmt.Sprintf("awecloud/ciApi/devops/object/%s/%s/commits", repo, scm.TrimRef(ref))
+	path := fmt.Sprintf("awecloud/migrationApi/devops/version/drone/%s/%s/commits", repo, scm.TrimRef(ref))
 	out := new(commit)
 	res, err := s.client.do(ctx, "GET", path, nil, out)
 	return convertCommit(out), res, err

@@ -28,16 +28,16 @@ git tag -d v1.24.0-beagle.0
 
 ```bash
 # 新建一个Tag
-git tag v1.24.0-beagle
+git tag v1.24.0-migeation
 
 # 推送一个Tag ，-f 强制更新
-git push -f origin v1.24.0-beagle
+git push -f origin v1.24.0-migeation
 
 # 删除本地Tag
-git tag -d v1.24.0-beagle
+git tag -d v1.24.0-migeation
 
 # 删除远程仓库tag
-git push origin :refs/tags/v1.24.0-beagle.27
+git push origin :refs/tags/v1.24.0-migeation.1
 ```
 
 
