@@ -24,7 +24,7 @@ func (s *gitService) FindBranch(ctx context.Context, repo, name string) (*scm.Re
 }
 
 func (s *gitService) FindCommit(ctx context.Context, repo, ref string) (*scm.Commit, *scm.Response, error) {
-	path := fmt.Sprintf("awecloud/ciApi/devops/object/%s/%s/commits", repo, scm.TrimRef(ref))
+	path := fmt.Sprintf("awecloud/lzjciApi/devops/object/%s/%s/commits", repo, scm.TrimRef(ref))
 	out := new(scm.Commit)
 	res, err := s.client.do(ctx, "GET", path, nil, out)
 	return out, res, err
