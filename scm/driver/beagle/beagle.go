@@ -53,7 +53,7 @@ func New(uri string) (*scm.Client, error) {
 	// client.Releases = &releaseService{client}
 	// client.Reviews = &reviewService{client}
 	client.Users = &userService{client}
-	// client.Webhooks = &webhookService{client}
+	client.Webhooks = &webhookService{client}
 	return client.Client, nil
 }
 
