@@ -16,7 +16,7 @@ type repositoryService struct {
 }
 
 func (s *repositoryService) Find(ctx context.Context, repo string) (*scm.Repository, *scm.Response, error) {
-	path := fmt.Sprintf("awecloud/lzjciApi/devops/project/%s", repo)
+	path := fmt.Sprintf("awecloud/ciApi/devops/project/%s", repo)
 	out := new(scm.Repository)
 	res, err := s.client.do(ctx, "GET", path, nil, out)
 	return out, res, err
@@ -27,14 +27,14 @@ func (s *repositoryService) FindHook(ctx context.Context, repo string, id string
 }
 
 func (s *repositoryService) FindPerms(ctx context.Context, repo string) (*scm.Perm, *scm.Response, error) {
-	path := fmt.Sprintf("awecloud/lzjciApi/devops/project/%s", repo)
+	path := fmt.Sprintf("awecloud/ciApi/devops/project/%s", repo)
 	out := new(scm.Repository)
 	res, err := s.client.do(ctx, "GET", path, nil, out)
 	return out.Perm, res, err
 }
 
 func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*scm.Repository, *scm.Response, error) {
-	path := fmt.Sprintf("awecloud/lzjciApi/devops/project/?%s", encodeMemberListOptions(opts))
+	path := fmt.Sprintf("awecloud/ciApi/devops/project/?%s", encodeMemberListOptions(opts))
 	out := []*scm.Repository{}
 	res, err := s.client.do(ctx, "GET", path, nil, &out)
 	return out, res, err
