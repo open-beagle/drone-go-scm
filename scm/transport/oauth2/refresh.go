@@ -54,10 +54,15 @@ func (t *Refresher) Token(ctx context.Context) (*scm.Token, error) {
 
 // Refresh refreshes the expired token.
 func (t *Refresher) Refresh(token *scm.Token) error {
+
 	values := url.Values{}
+
 	values.Set("grant_type", "refresh_token")
 	values.Set("refresh_token", token.Refresh)
-
+	if strings.Contains(t.Endpoint, "awecloud/dex") {
+		values.Set("client_id", t.ClientID)
+		values.Set("client_secret", t.ClientSecret)
+	}
 	reader := strings.NewReader(
 		values.Encode(),
 	)
