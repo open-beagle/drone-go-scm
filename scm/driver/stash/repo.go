@@ -97,6 +97,10 @@ type repositoryService struct {
 	client *wrapper
 }
 
+func (s *repositoryService) CreateProject(ctx context.Context, params *scm.RepoInput) (*scm.Response, error) {
+	return nil, scm.ErrNotSupported
+}
+
 // Find returns the repository by name.
 func (s *repositoryService) Find(ctx context.Context, repo string) (*scm.Repository, *scm.Response, error) {
 	namespace, name := scm.Split(repo)

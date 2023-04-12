@@ -37,7 +37,10 @@ func (s *gitService) FindTag(ctx context.Context, repo, name string) (*scm.Refer
 }
 
 func (s *gitService) ListBranches(ctx context.Context, repo string, opts scm.ListOptions) ([]*scm.Reference, *scm.Response, error) {
-	return nil, nil, scm.ErrNotSupported
+	path := fmt.Sprintf("awecloud/ciServer/devops/drone/branch/%s", encode(repo))
+	out := []*branch{}
+	res, err := s.client.do(ctx, "GET", path, nil, &out)
+	return convertBranchList(out), res, err
 }
 
 func (s *gitService) ListCommits(ctx context.Context, repo string, opts scm.CommitListOptions) ([]*scm.Commit, *scm.Response, error) {
@@ -56,6 +59,13 @@ func (s *gitService) CompareChanges(ctx context.Context, repo, source, target st
 	return nil, nil, scm.ErrNotSupported
 }
 
+func (s *gitService) ListGroup(ctx context.Context) ([]*scm.Group, *scm.Response, error) {
+	path := fmt.Sprintf("awecloud/ciServer/devops/drone/group")
+	out := []*group{}
+	res, err := s.client.do(ctx, "GET", path, nil, &out)
+	return convertGroupList(out), res, err
+}
+
 type commit struct {
 	ID            int64     `json:"id"`
 	Message       string    `json:"message"`
@@ -63,6 +73,26 @@ type commit struct {
 	AuthorDate    time.Time `json:"authoredDate"`
 	CommittedDate time.Time `json:"committedDate"`
 	CommitterName string    `json:"committerName"`
+}
+
+type group struct {
+	Id        int    `json:"id"`
+	GroupName string `json:"name" `
+}
+
+func convertGroupList(from []*group) []*scm.Group {
+	to := []*scm.Group{}
+	for _, v := range from {
+		to = append(to, convertGroup(v))
+	}
+	return to
+}
+
+func convertGroup(from *group) *scm.Group {
+	return &scm.Group{
+		Id:   from.Id,
+		Name: from.GroupName,
+	}
 }
 
 func convertCommit(from *commit) *scm.Commit {
@@ -79,5 +109,25 @@ func convertCommit(from *commit) *scm.Commit {
 			Name:  from.CommitterName,
 			Date:  from.CommittedDate,
 		},
+	}
+}
+
+type branch struct {
+	BranchName string `json:"branchName"`
+}
+
+func convertBranchList(from []*branch) []*scm.Reference {
+	to := []*scm.Reference{}
+	for _, v := range from {
+		to = append(to, convertBranch(v))
+	}
+	return to
+}
+
+func convertBranch(from *branch) *scm.Reference {
+	return &scm.Reference{
+		Name: from.BranchName,
+		Path: from.BranchName,
+		Sha:  "",
 	}
 }

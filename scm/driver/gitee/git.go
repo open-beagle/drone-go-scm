@@ -88,6 +88,10 @@ func (s *gitService) CompareChanges(ctx context.Context, repo, source, target st
 	return convertChangeList(out.Files), res, err
 }
 
+func (s *gitService) ListGroup(ctx context.Context) ([]*scm.Group, *scm.Response, error) {
+	return nil, nil, scm.ErrNotSupported
+}
+
 type branchCreate struct {
 	Refs       string `json:"refs"`
 	BranchName string `json:"branch_name"`

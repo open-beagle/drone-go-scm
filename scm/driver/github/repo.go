@@ -64,6 +64,10 @@ type RepositoryService struct {
 	client *wrapper
 }
 
+func (s *RepositoryService) CreateProject(ctx context.Context, params *scm.RepoInput) (*scm.Response, error) {
+	return nil, scm.ErrNotSupported
+}
+
 // Find returns the repository by name.
 func (s *RepositoryService) Find(ctx context.Context, repo string) (*scm.Repository, *scm.Response, error) {
 	path := fmt.Sprintf("repos/%s", repo)

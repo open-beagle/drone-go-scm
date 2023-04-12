@@ -15,6 +15,10 @@ type repositoryService struct {
 	client *wrapper
 }
 
+func (s *repositoryService) CreateProject(ctx context.Context, params *scm.RepoInput) (*scm.Response, error) {
+	return nil, scm.ErrNotSupported
+}
+
 func (s *repositoryService) Find(ctx context.Context, repo string) (*scm.Repository, *scm.Response, error) {
 	path := fmt.Sprintf("awecloud/ciApi/devops/project/%s", repo)
 	out := new(scm.Repository)

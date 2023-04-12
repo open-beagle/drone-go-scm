@@ -13,6 +13,11 @@ import (
 const EmptyCommit = "0000000000000000000000000000000000000000"
 
 type (
+	Group struct {
+		Id   int
+		Name string
+	}
+
 	// Reference represents a git reference.
 	Reference struct {
 		Name string
@@ -87,6 +92,9 @@ type (
 		// of the target commit, it is up to the driver to
 		// return a 2-way or 3-way diff changeset.
 		CompareChanges(ctx context.Context, repo, source, target string, opts ListOptions) ([]*Change, *Response, error)
+
+		// ListGroups returns a list of git group(beagle).
+		ListGroup(ctx context.Context) ([]*Group, *Response, error)
 	}
 
 	// CreateBranch is a type alias for upstream projects

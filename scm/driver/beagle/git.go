@@ -53,3 +53,7 @@ func (s *gitService) ListChanges(ctx context.Context, repo, ref string, opts scm
 func (s *gitService) CompareChanges(ctx context.Context, repo, source, target string, _ scm.ListOptions) ([]*scm.Change, *scm.Response, error) {
 	return nil, nil, scm.ErrNotSupported
 }
+
+func (s *gitService) ListGroup(ctx context.Context) ([]*scm.Group, *scm.Response, error) {
+	return nil, nil, scm.ErrNotSupported
+}

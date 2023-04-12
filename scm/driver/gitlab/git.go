@@ -88,6 +88,33 @@ func (s *gitService) CompareChanges(ctx context.Context, repo, source, target st
 	return convertChangeList(out.Diffs), res, err
 }
 
+func (s *gitService) ListGroup(ctx context.Context) ([]*scm.Group, *scm.Response, error) {
+	path := fmt.Sprintf("api/v4/groups?min_access_level=10")
+	out := []*group{}
+	res, err := s.client.do(ctx, "GET", path, nil, &out)
+	return convertGroupList(out), res, err
+}
+
+type group struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+func convertGroupList(from []*group) []*scm.Group {
+	to := []*scm.Group{}
+	for _, v := range from {
+		to = append(to, convertGroup(v))
+	}
+	return to
+}
+
+func convertGroup(from *group) *scm.Group {
+	return &scm.Group{
+		Id:   from.Id,
+		Name: from.Name,
+	}
+}
+
 type branch struct {
 	Name   string `json:"name"`
 	Commit struct {

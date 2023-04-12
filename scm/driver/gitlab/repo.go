@@ -66,6 +66,16 @@ type repositoryService struct {
 	client *wrapper
 }
 
+func (s *repositoryService) CreateProject(ctx context.Context, params *scm.RepoInput) (*scm.Response, error) {
+	path := fmt.Sprintf("api/v4/projects")
+	in := &createRepo{
+		Name:       params.Name,
+		Path:       params.Path,
+		NameSpceId: params.Id,
+	}
+	return s.client.do(ctx, "POST", path, in, nil)
+}
+
 func (s *repositoryService) Find(ctx context.Context, repo string) (*scm.Repository, *scm.Response, error) {
 	path := fmt.Sprintf("api/v4/projects/%s", encode(repo))
 	out := new(repository)
@@ -161,6 +171,12 @@ func (s *repositoryService) UpdateHook(ctx context.Context, repo string, id stri
 func (s *repositoryService) DeleteHook(ctx context.Context, repo string, id string) (*scm.Response, error) {
 	path := fmt.Sprintf("api/v4/projects/%s/hooks/%s", encode(repo), id)
 	return s.client.do(ctx, "DELETE", path, nil, nil)
+}
+
+type createRepo struct {
+	Name       string `json:"name"`
+	Path       string `json:"path"`
+	NameSpceId int    `json:"namespace_id"`
 }
 
 // helper function to convert from the gogs repository list to

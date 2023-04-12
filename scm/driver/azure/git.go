@@ -107,6 +107,10 @@ func (s *gitService) CompareChanges(ctx context.Context, repo, source, target st
 	return convertChangeList(changes), res, err
 }
 
+func (s *gitService) ListGroup(ctx context.Context) ([]*scm.Group, *scm.Response, error) {
+	return nil, nil, scm.ErrNotSupported
+}
+
 type crudBranch []struct {
 	Name        string `json:"name"`
 	OldObjectID string `json:"oldObjectId"`

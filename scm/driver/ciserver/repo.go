@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/drone/go-scm/scm"
@@ -38,8 +39,22 @@ type repositoryService struct {
 	client *wrapper
 }
 
+func (s *repositoryService) CreateProject(ctx context.Context, params *scm.RepoInput) (*scm.Response, error) {
+	path := fmt.Sprintf("awecloud/ciServer/devops/drone/project")
+	in := &createRepo{
+		Name:       params.Name,
+		NameSpceId: params.Id,
+	}
+	return s.client.do(ctx, "POST", path, in, nil)
+}
+
 func (s *repositoryService) Find(ctx context.Context, repo string) (*scm.Repository, *scm.Response, error) {
-	path := fmt.Sprintf("awecloud/ciServer/devops/drone/repo/%s", repo)
+	var path string
+	if strings.Contains(repo, "/") {
+		path = fmt.Sprintf("awecloud/ciServer/devops/drone/repo/%s", repo)
+	} else {
+		path = fmt.Sprintf("awecloud/ciServer/devops/drone/project/%s", repo)
+	}
 	out := new(repository)
 	res, err := s.client.do(ctx, "GET", path, nil, out)
 	return convertRepository(out), res, err
@@ -88,6 +103,11 @@ func (s *repositoryService) UpdateHook(ctx context.Context, repo string, id stri
 
 func (s *repositoryService) DeleteHook(ctx context.Context, repo string, id string) (*scm.Response, error) {
 	return nil, nil
+}
+
+type createRepo struct {
+	Name       string `json:"name"`
+	NameSpceId int    `json:"groupId"`
 }
 
 // helper function to convert from the gogs repository list to

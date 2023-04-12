@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"strings"
 
 	"github.com/drone/go-scm/scm"
 )
@@ -17,7 +18,12 @@ type contentService struct {
 }
 
 func (s *contentService) Find(ctx context.Context, repo, path, ref string) (*scm.Content, *scm.Response, error) {
-	endpoint := fmt.Sprintf("awecloud/ciServer/devops/drone/content/%s?ref=%s&path=%s", repo, ref, path)
+	var endpoint string
+	if strings.Contains(repo, "/") {
+		endpoint = fmt.Sprintf("awecloud/ciServer/devops/drone/content/repo/%s?ref=%s&path=%s", repo, ref, path)
+	} else {
+		endpoint = fmt.Sprintf("awecloud/ciServer/devops/drone/content/project/%s?ref=%s&path=%s", repo, ref, path)
+	}
 	out := new(content)
 	res, err := s.client.do(ctx, "GET", endpoint, nil, out)
 	raw, berr := base64.StdEncoding.DecodeString(out.Content)
@@ -33,12 +39,27 @@ func (s *contentService) Find(ctx context.Context, repo, path, ref string) (*scm
 }
 
 func (s *contentService) Create(ctx context.Context, repo, path string, params *scm.ContentParams) (*scm.Response, error) {
-	return nil, scm.ErrNotSupported
-
+	endpoint := fmt.Sprintf("awecloud/ciServer/devops/drone/content/project/%s", encode(repo))
+	in := &createUpdateContent{
+		FilePath:      path,
+		Branch:        params.Branch,
+		Content:       params.Data,
+		CommitMessage: params.Message,
+	}
+	res, err := s.client.do(ctx, "POST", endpoint, in, nil)
+	return res, err
 }
 
 func (s *contentService) Update(ctx context.Context, repo, path string, params *scm.ContentParams) (*scm.Response, error) {
-	return nil, scm.ErrNotSupported
+	endpoint := fmt.Sprintf("awecloud/ciServer/devops/drone/content/project/%s", encode(repo))
+	in := &createUpdateContent{
+		FilePath:      path,
+		Branch:        params.Branch,
+		Content:       params.Data,
+		CommitMessage: params.Message,
+	}
+	res, err := s.client.do(ctx, "POST", endpoint, in, nil)
+	return res, err
 }
 
 func (s *contentService) Delete(ctx context.Context, repo, path string, params *scm.ContentParams) (*scm.Response, error) {
@@ -57,4 +78,11 @@ type content struct {
 	BlobID       string `json:"blobId"`
 	CommitID     string `json:"commitId"`
 	LastCommitID string `json:"lastCommitId"`
+}
+
+type createUpdateContent struct {
+	FilePath      string `json:"filePath"`
+	Branch        string `json:"branch"`
+	Content       []byte `json:"content"`
+	CommitMessage string `json:"commit_message"`
 }

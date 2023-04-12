@@ -10,6 +10,15 @@ import (
 )
 
 type (
+
+	// RepoInput provides the input fields required for
+	// creating  repository.
+	RepoInput struct {
+		Name string
+		Path string
+		Id   int
+	}
+
 	// Repository represents a git repository.
 	Repository struct {
 		ID         string
@@ -108,6 +117,8 @@ type (
 
 	// RepositoryService provides access to repository resources.
 	RepositoryService interface {
+		// Create a repository (beagle)
+		CreateProject(ctx context.Context, params *RepoInput) (*Response, error)
 		// Find returns a repository by name.
 		Find(context.Context, string) (*Repository, *Response, error)
 
