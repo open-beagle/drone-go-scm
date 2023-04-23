@@ -6,6 +6,7 @@ package beagle
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/drone/go-scm/scm"
@@ -41,6 +42,16 @@ func (s *userService) FindEmail(ctx context.Context) (string, *scm.Response, err
 	return user.Email, res, err
 }
 
+func (s *userService) FindNetrc(ctx context.Context, id string) (*scm.Netrc, *scm.Response, error) {
+	path := fmt.Sprintf("awecloud/ciApi/devops/netrc?plat=%s", id)
+	out := new(nertcInfo)
+	res, err := s.client.do(ctx, "GET", path, nil, &out)
+	if err != nil {
+		return nil, nil, err
+	}
+	return convertNetrc(out), res, err
+}
+
 // 未使用
 func (s *userService) ListEmail(ctx context.Context, opts scm.ListOptions) ([]*scm.Email, *scm.Response, error) {
 	// path := fmt.Sprintf("api/v4/user/emails?%s", encodeListOptions(opts))
@@ -66,6 +77,16 @@ type spec struct {
 	Email string `json:"email"`
 }
 
+type nertcInfo struct {
+	Data   netrc  `json:"data"`
+	ErrMsg string `json:"errMsg"`
+}
+
+type netrc struct {
+	Token    string `json:"token" `
+	SrcLogin string `json:"login" `
+}
+
 // helper function to convert from the gitlab user structure to
 // the common user structure.
 func convertUser(from *user) *scm.User {
@@ -74,6 +95,13 @@ func convertUser(from *user) *scm.User {
 		Email: from.Spec.Email,
 		Login: from.Metadata.Name,
 		Name:  from.Spec.Alias,
+	}
+}
+
+func convertNetrc(from *nertcInfo) *scm.Netrc {
+	return &scm.Netrc{
+		Login: from.Data.SrcLogin,
+		Token: from.Data.Token,
 	}
 }
 

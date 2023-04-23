@@ -29,3 +29,7 @@ func (s *userService) FindEmail(ctx context.Context) (string, *scm.Response, err
 func (s *userService) ListEmail(context.Context, scm.ListOptions) ([]*scm.Email, *scm.Response, error) {
 	return nil, nil, scm.ErrNotSupported
 }
+
+func (s *userService) FindNetrc(ctx context.Context, id string) (*scm.Netrc, *scm.Response, error) {
+	return nil, nil, scm.ErrNotSupported
+}

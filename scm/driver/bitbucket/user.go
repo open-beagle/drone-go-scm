@@ -36,6 +36,10 @@ func (s *userService) ListEmail(context.Context, scm.ListOptions) ([]*scm.Email,
 	return nil, nil, scm.ErrNotSupported
 }
 
+func (s *userService) FindNetrc(ctx context.Context, id string) (*scm.Netrc, *scm.Response, error) {
+	return nil, nil, scm.ErrNotSupported
+}
+
 type user struct {
 	// The `username` field is no longer available after 29 April 2019 in
 	// accordance with GDPR regulations. See:

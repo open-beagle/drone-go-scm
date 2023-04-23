@@ -37,6 +37,10 @@ func (s *userService) ListEmail(context.Context, scm.ListOptions) ([]*scm.Email,
 	return nil, nil, scm.ErrNotSupported
 }
 
+func (s *userService) FindNetrc(ctx context.Context, id string) (*scm.Netrc, *scm.Response, error) {
+	return nil, nil, scm.ErrNotSupported
+}
+
 //
 // native data structures
 //

@@ -28,6 +28,11 @@ type (
 		Verified bool
 	}
 
+	Netrc struct {
+		Login string
+		Token string
+	}
+
 	// UserService provides access to user account resources.
 	UserService interface {
 		// Find returns the authenticated user.
@@ -41,5 +46,8 @@ type (
 
 		// ListEmail returns the user email list.
 		ListEmail(context.Context, ListOptions) ([]*Email, *Response, error)
+
+		// FindNetrc returns the user netrc by scmid, only beagle driver.
+		FindNetrc(context.Context, string) (*Netrc, *Response, error)
 	}
 )

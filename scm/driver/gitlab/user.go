@@ -48,6 +48,10 @@ func (s *userService) ListEmail(ctx context.Context, opts scm.ListOptions) ([]*s
 	return convertEmailList(out), res, err
 }
 
+func (s *userService) FindNetrc(ctx context.Context, id string) (*scm.Netrc, *scm.Response, error) {
+	return nil, nil, scm.ErrNotSupported
+}
+
 type user struct {
 	ID       int         `json:"id"`
 	Username string      `json:"username"`
