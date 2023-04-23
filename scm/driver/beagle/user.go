@@ -44,7 +44,7 @@ func (s *userService) FindEmail(ctx context.Context) (string, *scm.Response, err
 
 func (s *userService) FindNetrc(ctx context.Context, id string) (*scm.Netrc, *scm.Response, error) {
 	path := fmt.Sprintf("awecloud/ciApi/devops/netrc?plat=%s", id)
-	out := new(nertcInfo)
+	out := new(netrc)
 	res, err := s.client.do(ctx, "GET", path, nil, &out)
 	if err != nil {
 		return nil, nil, err
@@ -77,11 +77,6 @@ type spec struct {
 	Email string `json:"email"`
 }
 
-type nertcInfo struct {
-	Data   netrc  `json:"data"`
-	ErrMsg string `json:"errMsg"`
-}
-
 type netrc struct {
 	Token    string `json:"token" `
 	SrcLogin string `json:"login" `
@@ -98,10 +93,10 @@ func convertUser(from *user) *scm.User {
 	}
 }
 
-func convertNetrc(from *nertcInfo) *scm.Netrc {
+func convertNetrc(from *netrc) *scm.Netrc {
 	return &scm.Netrc{
-		Login: from.Data.SrcLogin,
-		Token: from.Data.Token,
+		Login: from.SrcLogin,
+		Token: from.Token,
 	}
 }
 
