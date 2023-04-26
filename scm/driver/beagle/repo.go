@@ -39,9 +39,11 @@ func (s *repositoryService) FindPerms(ctx context.Context, repo string) (*scm.Pe
 
 func (s *repositoryService) List(ctx context.Context, opts scm.ListOptions) ([]*scm.Repository, *scm.Response, error) {
 	path := fmt.Sprintf("awecloud/ciApi/devops/project/?%s", encodeMemberListOptions(opts))
-	out := []*scm.Repository{}
+	out := new(repo)
 	res, err := s.client.do(ctx, "GET", path, nil, &out)
-	return out, res, err
+	res.Page.Next = out.Next
+	res.Page.NextURL = out.NextUrl
+	return out.Data, res, err
 }
 
 func (s *repositoryService) ListHooks(ctx context.Context, repo string, opts scm.ListOptions) ([]*scm.Hook, *scm.Response, error) {
@@ -66,4 +68,10 @@ func (s *repositoryService) UpdateHook(ctx context.Context, repo string, id stri
 
 func (s *repositoryService) DeleteHook(ctx context.Context, repo string, id string) (*scm.Response, error) {
 	return nil, nil
+}
+
+type repo struct {
+	Data    []*scm.Repository `json:"data"`
+	Next    int               `json:"next"`
+	NextUrl string            `json:"nextUrl"`
 }
