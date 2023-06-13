@@ -22,13 +22,6 @@ type Token struct {
 	Expires time.Time
 }
 
-type key int
-
-const (
-	tokenKey key = iota
-	errorKey
-)
-
 // New returns a new GitLab API client.
 func New(uri string) (*scm.Client, error) {
 	base, err := url.Parse(uri)
@@ -79,16 +72,13 @@ func (c *wrapper) do(ctx context.Context, method, path string, in, out interface
 		Path:   path,
 	}
 
-	token, _ := ctx.Value(tokenKey).(*Token)
 	// if we are posting or putting data, we need to
 	// write it to the body of the request.
 	if in != nil {
 		buf := new(bytes.Buffer)
 		json.NewEncoder(buf).Encode(in)
-		//添加获取用户信息header
 		req.Header = map[string][]string{
-			"Content-Type":  {"application/json"},
-			"Authorization": {"Bearer " + token.Access},
+			"Content-Type": {"application/json"},
 		}
 		req.Body = buf
 	}
