@@ -70,7 +70,11 @@ func (t *Refresher) Refresh(token *scm.Token) error {
 	if err != nil {
 		return err
 	}
-	req.SetBasicAuth(t.ClientID, t.ClientSecret)
+
+	if !strings.Contains(t.Endpoint, "awecloud/dex") {
+		req.SetBasicAuth(t.ClientID, t.ClientSecret)
+	}
+
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	res, err := t.client().Do(req)
