@@ -76,8 +76,10 @@ func (t *Refresher) Refresh(token *scm.Token) error {
 	}
 
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
 
-	res, err := t.client().Do(req)
+	res, err := t.client().Do(req.WithContext(ctx))
 	if err != nil {
 		return err
 	}
